@@ -1,0 +1,6 @@
+{
+  "config": {
+    // Upstream rule numbers are stable IDs, not an ordered sequence.
+    "MD029": false
+  }
+}
