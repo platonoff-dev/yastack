@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-attack-the-premise"
+  short_description: "Test a shared premise after repeated fixes fail the same gate"
+  default_prompt: "Use $principle-attack-the-premise on these repeated failures."
+policy:
+  allow_implicit_invocation: false

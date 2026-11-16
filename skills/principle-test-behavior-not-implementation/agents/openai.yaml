@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-test-behavior-not-implementation"
+  short_description: "Test observable behavior and survive internal refactors"
+  default_prompt: "Use $principle-test-behavior-not-implementation to review these tests."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-redesign-from-first-principles"
+  short_description: "Redesign around a new requirement as a foundational assumption"
+  default_prompt: "Use $principle-redesign-from-first-principles on this task."
+policy:
+  allow_implicit_invocation: false

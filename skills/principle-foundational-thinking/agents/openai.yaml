@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-foundational-thinking"
+  short_description: "Choose data structures and foundations before feature logic"
+  default_prompt: "Use $principle-foundational-thinking on this task."
+policy:
+  allow_implicit_invocation: false

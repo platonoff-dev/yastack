@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-subtract-before-you-add"
+  short_description: "Remove complexity before building on a simpler base"
+  default_prompt: "Use $principle-subtract-before-you-add on this task."
+policy:
+  allow_implicit_invocation: false

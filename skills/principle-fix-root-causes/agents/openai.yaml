@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-fix-root-causes"
+  short_description: "Trace symptoms to the first wrong decision and fix it"
+  default_prompt: "Use $principle-fix-root-causes on this bug."
+policy:
+  allow_implicit_invocation: false

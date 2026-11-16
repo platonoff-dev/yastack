@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-experience-first"
+  short_description: "Choose user delight over implementation convenience"
+  default_prompt: "Use $principle-experience-first on this product tradeoff."
+policy:
+  allow_implicit_invocation: false
