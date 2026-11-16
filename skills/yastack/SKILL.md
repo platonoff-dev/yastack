@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 The user started this task through yastack. Route it, then do it.
 
-Skills in this stack never load on their own. You load one by reading its file, only when a non-negotiable, a principle, or a playbook step below names it. Paths are relative to this file: playbooks at `playbooks/<name>.md`, skills and principles at `../<name>/SKILL.md`.
+Skills in this stack never load on their own. You load one by reading its file, only when a non-negotiable, a principle, a playbook step below, or an explicit user request names it. Paths are relative to this file: playbooks at `playbooks/<name>.md`, skills and principles at `../<name>/SKILL.md`.
 
 ## Non-negotiables
 
@@ -117,3 +117,14 @@ The user's own instructions in the task, `AGENTS.md`, or `CLAUDE.md` override a 
 
 - **Perf issue** (`perf-issue`). A measured slowness to trace and improve against a baseline.
 - **Opening a PR** (`opening-a-pr`). Open, update, or stack a GitHub pull request or GitLab merge request. Invoked at the end of every other playbook.
+
+## Standalone skills
+
+For an explicit request to run one of these skills, read its linked file.
+
+- [how](../how/SKILL.md). Explain how a subsystem works, including its architecture, runtime flow, and ownership.
+- [bro](../bro/SKILL.md). Restate the last message in plain human language, with no jargon.
+- [in-your-own-words](../in-your-own-words/SKILL.md). Restate the user's goals and the problem they want to solve.
+- [tdd](../tdd/SKILL.md). Make a focused regression fail before a bug fix and pass after it.
+- [sharpen](../sharpen/SKILL.md). Make a task deeper, not bigger, then rewrite the prompt.
+- [correct](../correct/SKILL.md). Prevent recurring agent mistakes through architecture, types, checks, and tests.

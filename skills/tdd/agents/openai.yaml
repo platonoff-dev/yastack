@@ -1,0 +1,6 @@
+interface:
+  display_name: "tdd"
+  short_description: "Prove a focused regression fails before the fix and passes after"
+  default_prompt: "Use $tdd to fix this bug with a focused regression check."
+policy:
+  allow_implicit_invocation: false
