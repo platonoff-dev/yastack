@@ -128,3 +128,4 @@ For an explicit request to run one of these skills, read its linked file.
 - [tdd](../tdd/SKILL.md). Make a focused regression fail before a bug fix and pass after it.
 - [sharpen](../sharpen/SKILL.md). Make a task deeper, not bigger, then rewrite the prompt.
 - [correct](../correct/SKILL.md). Prevent recurring agent mistakes through architecture, types, checks, and tests.
+- [arena](../arena/SKILL.md). Spawn parallel candidates, pick a base, and graft the strongest parts into one artifact.
