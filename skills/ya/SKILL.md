@@ -27,9 +27,9 @@ A subagent can't run slash commands and doesn't know this stack. When a step del
 ## Playbooks
 
 | playbook | use for |
-|---|---|
+| --- | --- |
 
 ## Skills
 
 | skill | what it does |
-|---|---|
+| --- | --- |

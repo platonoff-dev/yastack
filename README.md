@@ -18,6 +18,12 @@ scripts/install.sh --uninstall
 
 Run it from the main checkout. Skill edits apply live through the symlinks.
 
+## Development
+
+```bash
+pre-commit install   # once per clone; the hook is the only gate (no CI)
+```
+
 ## Layout
 
 - `skills/ya/`: the entry point, with its playbooks in `playbooks/`.

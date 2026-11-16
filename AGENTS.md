@@ -15,7 +15,7 @@ The remote is public (`github.com/platonoff-dev/yastack`). Nothing work-specific
 
 ## Layout
 
-```
+```text
 skills/
   ya/                     entry point (the router)
     SKILL.md              routing rules + the playbook and skill catalogs
@@ -65,7 +65,7 @@ Adding or changing a skill or playbook:
 2. Write it tight. Keep only what the model would otherwise get wrong or do inconsistently: exact steps, gotchas, commands, output shapes. Cut general best practice, motivation, and padded examples.
 3. For a skill: create `skills/<name>/SKILL.md` with the frontmatter above and `agents/openai.yaml` (copy one from an existing skill). Add a row `` | `<name>` | <what it does> | `` to the Skills table in `skills/ya/SKILL.md`, and name the skill in the playbook step that uses it.
 4. For a playbook: create `skills/ya/playbooks/<name>.md` and add a row `` | `<name>` | <use for> | `` to the Playbooks table.
-5. Run `python3 scripts/check.py`.
+5. Run `python3 scripts/check.py`. The pre-commit hook runs it again on commit.
 6. Test it. Re-run the prompt from the original evidence in a fresh session, through `/ya`, and confirm the route and the behavior changed. Say in the commit message whether you did this.
 
 Removing is a feature. Suggest deleting a skill or playbook that hasn't been routed to in a while, or that a newer one supersedes.
@@ -79,7 +79,26 @@ Never bulk-import skill packs or generate batches of skills.
 - Name exact files, commands, and output formats. "Run the tests" is weaker than the command.
 - A `description` says what the skill does in one or two sentences. It is shown in the `/` menu, not used for triggering, so trigger phrases are not needed.
 
+## Pre-commit is the only gate
+
+There is no CI. The pre-commit hook (`.pre-commit-config.yaml`) is the only thing between a change and `main`, so every mechanical check and lint lives there:
+
+- file hygiene: trailing whitespace, final newline, LF endings, YAML syntax, merge markers, shebangs and executable bits, private keys
+- `ruff` lint and format for Python (`ruff.toml`)
+- `shellcheck` for shell scripts
+- `markdownlint-cli2` for Markdown (`.markdownlint-cli2.jsonc`)
+- `scripts/check.py` for the stack invariants
+
+Rules:
+
+- Never commit with `--no-verify`, and never skip a hook with `SKIP=`. If a hook is wrong, fix the hook or its config in the same commit and say why in the message.
+- A new kind of file or check gets its hook in the same change. If you add a language, add its linter.
+- Some hooks fix files in place (whitespace, `ruff --fix`, `ruff format`). When the commit fails that way, review the fixes, `git add` them, and commit again.
+
 ## Commands
 
-- `python3 scripts/check.py`: validate invariants. Exits non-zero with one line per violation.
+- `pre-commit install`: once per clone. Worktrees share the hook through the common git dir.
+- `pre-commit run --all-files`: run every hook on the whole repo. Run it after changing a hook or a lint config.
+- `pre-commit autoupdate`: bump the pinned hook revisions.
+- `python3 scripts/check.py`: validate invariants only. Exits non-zero with one line per violation.
 - `scripts/install.sh`: link every skill into `~/.claude/skills/` and `~/.agents/skills/`. Run from the main checkout, never from a worktree. Idempotent. `scripts/install.sh --uninstall` removes the links.
