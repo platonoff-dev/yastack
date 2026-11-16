@@ -33,5 +33,6 @@ A subagent can't run slash commands and doesn't know this stack. When a step del
 
 | skill | what it does |
 | --- | --- |
+| `unslop-comments` | Spawn a fresh-context subagent to delete excess comments from a diff, then review its deletions. |
 | `unslop-code` | Remove AI slop from the code a branch adds: narrating comments, needless defensive code, type-checker escapes, deep nesting, dead code. |
 | `unslop-prose` | Cut AI tells from prose: PR descriptions, commit messages, docs. |
