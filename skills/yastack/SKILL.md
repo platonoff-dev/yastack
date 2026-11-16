@@ -28,6 +28,7 @@ A subagent can't run slash commands and doesn't know this stack. When a step del
 
 | playbook | use for |
 | --- | --- |
+| `opening-a-pr` | Open, update, or stack a GitHub pull request or GitLab merge request: clean the diff, shape commits, write the title and body, open ready. |
 
 ## Skills
 
