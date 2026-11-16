@@ -118,6 +118,7 @@ The user's own instructions in the task, `AGENTS.md`, or `CLAUDE.md` override a 
 - **Bug fix** (`bug-fix`). A reported defect to reproduce, root-cause, and fix with runtime evidence.
 - **Perf issue** (`perf-issue`). A measured slowness to trace and improve against a baseline.
 - **Feature** (`feature`). Design, delegate implementation, and verify a new feature.
+- **Refactoring** (`refactoring`). A focused-to-medium structural change that preserves behavior against a pinned contract.
 - **Opening a PR** (`opening-a-pr`). Open, update, or stack a GitHub pull request or GitLab merge request. Invoked at the end of every other playbook.
 
 ## Standalone skills
