@@ -1,0 +1,6 @@
+interface:
+  display_name: "why"
+  short_description: "Explain why code is shaped this way, from its history"
+  default_prompt: "Use $why on this code."
+policy:
+  allow_implicit_invocation: false
