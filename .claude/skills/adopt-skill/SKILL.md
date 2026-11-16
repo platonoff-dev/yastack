@@ -41,7 +41,7 @@ Present the verdict, the shape, and vendor-or-rewrite to the user before writing
 
 ## 5. Wire it in
 
-Follow "Changing the stack" in `AGENTS.md`: frontmatter, `agents/openai.yaml`, the table row in `skills/yastack/SKILL.md`, and a playbook step that names it. Run `python3 scripts/check.py`.
+Follow "Changing the stack" in `AGENTS.md`: frontmatter, `agents/openai.yaml`, the list entry or link in `skills/yastack/SKILL.md`, and a playbook step that names it. Run `python3 scripts/check.py`.
 
 Name the source (URL and commit SHA, plus the license if vendored) in the commit message. Don't add provenance files.
 

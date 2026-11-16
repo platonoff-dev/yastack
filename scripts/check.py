@@ -8,8 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 ENTRY = "yastack"
+PRINCIPLE = "principle-"
 LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
-ROW = re.compile(r"^\|\s*`([a-z0-9-]+)`\s*\|")
+ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
 
 errors = []
 
@@ -29,12 +30,12 @@ def frontmatter(path):
     return fields
 
 
-def table(text, heading):
+def section(text, heading):
     match = re.search(rf"^## {heading}\n(.*?)(?=^## |\Z)", text, re.M | re.S)
     if not match:
         errors.append(f"skills/{ENTRY}/SKILL.md: missing '## {heading}' section")
         return set()
-    return {m.group(1) for line in match.group(1).splitlines() if (m := ROW.match(line))}
+    return set(ITEM.findall(match.group(1)))
 
 
 def rel(path):
@@ -75,21 +76,36 @@ for skill in skill_dirs:
 entry_md = SKILLS / ENTRY / "SKILL.md"
 if entry_md.is_file():
     text = entry_md.read_text()
-
-    listed = table(text, "Skills")
-    present = {p.name for p in skill_dirs} - {ENTRY}
-    for name in sorted(present - listed):
-        errors.append(f"skills/{name}: not in the Skills table of skills/{ENTRY}/SKILL.md")
-    for name in sorted(listed - present):
-        errors.append(f"skills/{ENTRY}/SKILL.md: Skills table lists missing skill {name!r}")
-
-    listed = table(text, "Playbooks")
+    names = {p.name for p in skill_dirs} - {ENTRY}
     playbook_dir = SKILLS / ENTRY / "playbooks"
-    present = {p.stem for p in playbook_dir.glob("*.md")} if playbook_dir.is_dir() else set()
-    for name in sorted(present - listed):
-        errors.append(f"skills/{ENTRY}/playbooks/{name}.md: not in the Playbooks table")
-    for name in sorted(listed - present):
-        errors.append(f"skills/{ENTRY}/SKILL.md: Playbooks table lists missing playbook {name!r}")
+    playbooks = {p.stem for p in playbook_dir.glob("*.md")} if playbook_dir.is_dir() else set()
+    principles = {n for n in names if n.startswith(PRINCIPLE)}
+
+    for heading, present, kind in (
+        ("Playbooks", playbooks, "playbook"),
+        ("Principles", principles, "principle"),
+    ):
+        listed = section(text, heading)
+        for name in sorted(present - listed):
+            errors.append(f"{kind} {name}: not under '## {heading}' in the entry point")
+        for name in sorted(listed - present):
+            errors.append(f"skills/{ENTRY}/SKILL.md: '## {heading}' lists missing {kind} {name!r}")
+
+    seen = set()
+    todo = [entry_md]
+    todo += [playbook_dir / f"{n}.md" for n in playbooks]
+    todo += [SKILLS / n / "SKILL.md" for n in principles]
+    while todo:
+        doc = todo.pop().resolve()
+        if doc in seen or not doc.is_file():
+            continue
+        seen.add(doc)
+        for target in LINK.findall(doc.read_text()):
+            if "://" not in target and target.endswith(".md"):
+                todo.append(doc.parent / target)
+    reached = {d.relative_to(SKILLS).parts[0] for d in seen if d.is_relative_to(SKILLS)}
+    for name in sorted(names - principles - reached):
+        errors.append(f"skills/{name}: unreachable, nothing links to it from the entry point")
 else:
     errors.append(f"skills/{ENTRY}/SKILL.md: entry point missing")
 
