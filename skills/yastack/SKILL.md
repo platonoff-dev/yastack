@@ -115,6 +115,7 @@ No playbook fits: do the task without one. End your final reply with one line, `
 
 The user's own instructions in the task, `AGENTS.md`, or `CLAUDE.md` override a playbook step. Say which step you overrode.
 
+- **Investigation** (`investigation`). A read-only question that needs a cited explanation or a recommendation.
 - **Bug fix** (`bug-fix`). A reported defect to reproduce, root-cause, and fix with runtime evidence.
 - **Perf issue** (`perf-issue`). A measured slowness to trace and improve against a baseline.
 - **Feature** (`feature`). Design, delegate implementation, and verify a new feature.
