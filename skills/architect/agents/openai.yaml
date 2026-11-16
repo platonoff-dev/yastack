@@ -1,0 +1,6 @@
+interface:
+  display_name: "Architect"
+  short_description: "Sketch and compare designs before implementation"
+  default_prompt: "Use $architect to sketch types, signatures, and module boundaries before implementing."
+policy:
+  allow_implicit_invocation: false

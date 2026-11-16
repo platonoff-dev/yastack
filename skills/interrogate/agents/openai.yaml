@@ -1,0 +1,6 @@
+interface:
+  display_name: "Interrogate"
+  short_description: "Challenge changes and designs with executable evidence"
+  default_prompt: "Use $interrogate to challenge this change or design and report only verified findings."
+policy:
+  allow_implicit_invocation: false
