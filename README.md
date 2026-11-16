@@ -31,3 +31,7 @@ pre-commit install   # once per clone; the hook is the only gate (no CI)
 - `scripts/check.py`: validates the stack's invariants.
 
 `AGENTS.md` has the design and the rules for changing the stack.
+
+## Adopt from pstack
+
+Use `/adopt-skill <pstack URL or path>` in Claude Code or `$adopt-skill <pstack URL or path>` in Codex from this project. The project skill copies one item with minimal adaptations and rejects unmet required dependencies. It lives in `.claude/skills/adopt-skill/`, with a project-local Codex link in `.agents/skills/`.

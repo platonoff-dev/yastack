@@ -10,7 +10,7 @@ yastack is a personal stack of agent skills for Claude Code and Codex. It borrow
 2. **Explicit routing only.** No skill triggers on its own. Every skill turns off implicit invocation, and the entry point loads skills by reading their files when a route says so.
 3. **Principles.** Short rules that cut across playbooks, such as "explain the number before you trust it". The entry point lists each one with the condition it applies under. The agent reads a principle when its condition holds and names it in the final reply.
 
-The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged first. pstack text stays as close to the original as possible. Other sources are usually rewritten to fit (see `.claude/skills/adopt-skill/SKILL.md`).
+The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged first. For pstack, follow `.claude/skills/adopt-skill/SKILL.md`. Keep the source text as close to the original as possible. Reject unmet required dependencies rather than deleting the steps that need them.
 
 The remote is public (`github.com/platonoff-dev/yastack`). Nothing work-specific goes here: no employer systems, people, tickets, hostnames, or secrets. Work skills live in the separate corporate `dotai` repo.
 
@@ -32,6 +32,7 @@ scripts/
   check.py                validates the invariants below; run before every commit
   install.sh              symlinks skills into ~/.claude/skills and ~/.agents/skills
 .claude/skills/           internal skills for maintaining this repo; not installed
+.agents/skills/           project-local Codex links to the same internal skills
 ```
 
 **Playbook or skill?** A playbook answers "what kind of task is this and what are the steps". A skill is a reusable capability that more than one playbook (or the user, directly) calls. Start new work as a playbook step. Extract a skill only when a second caller needs it. A principle is not a procedure. It is a rule with a condition ("when you measure, name the limiter") that any playbook or task can hit.
