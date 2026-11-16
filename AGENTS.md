@@ -10,7 +10,7 @@ yastack is a personal stack of agent skills for Claude Code and Codex. It borrow
 2. **Explicit routing only.** No skill triggers on its own. Every skill turns off implicit invocation, and the entry point loads skills by reading their files when a route says so.
 3. **Principles.** Short rules that cut across playbooks, such as "explain the number before you trust it". The entry point lists each one with the condition it applies under. The agent reads a principle when its condition holds and names it in the final reply.
 
-The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged and usually rewritten to fit (see `.claude/skills/adopt-skill/SKILL.md`).
+The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged first. pstack text stays as close to the original as possible. Other sources are usually rewritten to fit (see `.claude/skills/adopt-skill/SKILL.md`).
 
 The remote is public (`github.com/platonoff-dev/yastack`). Nothing work-specific goes here: no employer systems, people, tickets, hostnames, or secrets. Work skills live in the separate corporate `dotai` repo.
 

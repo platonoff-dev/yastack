@@ -35,7 +35,15 @@ Give a one-paragraph verdict. On "no", stop unless the user overrules it.
 
 ## 4. Vendor or rewrite
 
-Vendor verbatim only when all of these hold: it is already tight, it is self-contained, you read every line of its scripts, and its license allows redistribution. Rewrite in every other case, which is the usual outcome. Keep the non-obvious steps, gotchas, and commands. Drop references to skills yastack doesn't have. Make it shorter than the original. If it isn't, say why.
+**From pstack:** keep the text as close to the original as possible. Change only these:
+
+- Dependencies. A pstack skill or playbook becomes yastack's equivalent, in yastack's link format and under its name. Drop one yastack doesn't have.
+- Cursor-only tools. Replace them with the Claude Code and Codex equivalents.
+- Anything the user points to explicitly.
+
+Don't restructure, reword, add commands, or add wiring pstack doesn't have. Diff against the upstream file before you commit, and list every change in the commit message.
+
+**From elsewhere:** vendor verbatim only when all of these hold: it is already tight, it is self-contained, you read every line of its scripts, and its license allows redistribution. Rewrite in every other case, which is the usual outcome. Keep the non-obvious steps, gotchas, and commands. Drop references to skills yastack doesn't have. Make it shorter than the original. If it isn't, say why.
 
 Present the verdict, the shape, and vendor-or-rewrite to the user before writing files.
 
