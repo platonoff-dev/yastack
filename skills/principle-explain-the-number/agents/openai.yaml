@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-explain-the-number"
+  short_description: "Find what limits a number and what else it could be measuring"
+  default_prompt: "Use $principle-explain-the-number on this result."
+policy:
+  allow_implicit_invocation: false

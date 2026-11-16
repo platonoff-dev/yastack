@@ -1,0 +1,6 @@
+interface:
+  display_name: "benchmark-checklist"
+  short_description: "Vet a perf measurement before you report or act on it"
+  default_prompt: "Use $benchmark-checklist on this measurement."
+policy:
+  allow_implicit_invocation: false

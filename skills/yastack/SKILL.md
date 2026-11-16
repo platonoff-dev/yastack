@@ -21,6 +21,7 @@ Remaining triggers:
 - Docs, readmes, PR descriptions, or commit messages → the [technical-writing](../technical-writing/SKILL.md) skill.
 - Before commit → the [unslop-code](../unslop-code/SKILL.md) skill.
 - Before review → the [unslop-comments](../unslop-comments/SKILL.md) skill.
+- Running a benchmark, measuring perf yourself, or reporting a speedup or regression you measured → the [benchmark-checklist](../benchmark-checklist/SKILL.md) skill before you report or act on the number.
 - Broken skill mid-task → fix it in its own change. Don't block. Don't silently work around it.
 
 ## Principles
@@ -30,6 +31,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 ### Verification
 
 - **Sequence Work into Verifiable Units** (`principle-sequence-verifiable-units`). Multi-step work (sweeps, migrations, runs of similar edits) and how you stack commits and PRs. Break work into small units that each end in a check, verify each before the next, and order delivery so the sequence proves itself.
+- **Explain the Number** (`principle-explain-the-number`). Apply before you measure, and before you trust, report, or act on a number you measured (a speedup, a regression, a throughput, a latency, or an eval result). Find what limits it, and rule out that it measured something other than the work you think.
 
 ## Autonomy
 
@@ -77,4 +79,5 @@ No playbook fits: do the task without one. End your final reply with one line, `
 
 The user's own instructions in the task, `AGENTS.md`, or `CLAUDE.md` override a playbook step. Say which step you overrode.
 
+- **Perf issue** (`perf-issue`). A measured slowness to trace and improve against a baseline.
 - **Opening a PR** (`opening-a-pr`). Open, update, or stack a GitHub pull request or GitLab merge request. Invoked at the end of every other playbook.
