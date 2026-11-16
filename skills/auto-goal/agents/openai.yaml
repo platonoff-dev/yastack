@@ -1,0 +1,6 @@
+interface:
+  display_name: "Auto Goal"
+  short_description: "Keep working until a checkable condition holds"
+  default_prompt: "Use $auto-goal to keep working until the condition holds."
+policy:
+  allow_implicit_invocation: false

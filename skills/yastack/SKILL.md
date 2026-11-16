@@ -133,3 +133,4 @@ For an explicit request to run one of these skills, read its linked file.
 - [swarm](../swarm/SKILL.md). Fan out parallel workers across slices or race arms and return one report.
 - [control-cli](../control-cli/SKILL.md). Build or adapt a local harness to drive, inspect, and profile an interactive CLI or TUI.
 - [control-ui](../control-ui/SKILL.md). Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI.
+- [auto-goal](../auto-goal/SKILL.md). Keep working until a checkable condition holds, with a Codex goal or a headless Claude `/goal` session.
