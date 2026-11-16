@@ -135,3 +135,5 @@ For an explicit request to run one of these skills, read its linked file.
 - [control-ui](../control-ui/SKILL.md). Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI.
 - [auto-goal](../auto-goal/SKILL.md). Keep working until a checkable condition holds, with a Codex goal or a headless Claude `/goal` session.
 - [transcript](../transcript/SKILL.md). Find, read, and hand a reviewer the exact transcript of the active run.
+- [show-me-your-work](../show-me-your-work/SKILL.md). Keep and audit a reviewable decision trail for long-running or unattended work.
+- [figure-it-out](../figure-it-out/SKILL.md). Design and run an auditable workflow when no narrower playbook fits.
