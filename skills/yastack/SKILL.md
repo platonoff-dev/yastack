@@ -131,3 +131,5 @@ For an explicit request to run one of these skills, read its linked file.
 - [arena](../arena/SKILL.md). Spawn parallel candidates, pick a base, and graft the strongest parts into one artifact.
 - [architect](../architect/SKILL.md). Sketch types, signatures, and module structure before implementation.
 - [swarm](../swarm/SKILL.md). Fan out parallel workers across slices or race arms and return one report.
+- [control-cli](../control-cli/SKILL.md). Build or adapt a local harness to drive, inspect, and profile an interactive CLI or TUI.
+- [control-ui](../control-ui/SKILL.md). Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI.

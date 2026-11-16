@@ -1,0 +1,6 @@
+interface:
+  display_name: "control-ui"
+  short_description: "Drive and inspect local web, IDE, and Electron UIs"
+  default_prompt: "Use $control-ui to build or adapt a local browser harness for this UI."
+policy:
+  allow_implicit_invocation: false
