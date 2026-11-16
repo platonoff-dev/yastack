@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
-ENTRY = "ya"
+ENTRY = "yastack"
 LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 ROW = re.compile(r"^\|\s*`([a-z0-9-]+)`\s*\|")
 

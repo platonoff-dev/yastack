@@ -1,10 +1,10 @@
 ---
-name: ya
-description: Entry point to yastack. Matches the task to a playbook and loads the skills its steps need. Use as /ya <task>.
+name: yastack
+description: Entry point to yastack. Matches the task to a playbook and loads the skills its steps need. Use as /yastack <task>.
 disable-model-invocation: true
 ---
 
-# ya
+# yastack
 
 The user started this task through yastack. Route it, then do it.
 

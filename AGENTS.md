@@ -6,7 +6,7 @@ Guidance for AI agents working in this repository.
 
 yastack is a personal stack of agent skills for Claude Code and Codex. It borrows two ideas from poteto's pstack and nothing else by default:
 
-1. **One entry point.** The user types `/ya <task>` and the stack decides which playbook and skills apply. The user never has to remember which skill fits which task.
+1. **One entry point.** The user types `/yastack <task>` and the stack decides which playbook and skills apply. The user never has to remember which skill fits which task.
 2. **Explicit routing only.** No skill triggers on its own. Every skill turns off implicit invocation, and the entry point loads skills by reading their files when a route says so.
 
 The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged and usually rewritten to fit (see `.claude/skills/adopt-skill/SKILL.md`).
@@ -17,7 +17,7 @@ The remote is public (`github.com/platonoff-dev/yastack`). Nothing work-specific
 
 ```text
 skills/
-  ya/                     entry point (the router)
+  yastack/                entry point (the router)
     SKILL.md              routing rules + the playbook and skill catalogs
     playbooks/<name>.md   one procedure per task kind (bug fix, feature, ...)
     agents/openai.yaml    Codex metadata
@@ -39,7 +39,7 @@ scripts/
 
 - Every `skills/<name>/SKILL.md` has frontmatter `name: <name>` (matching the directory), a `description`, and `disable-model-invocation: true`.
 - Every skill has `agents/openai.yaml` with `policy.allow_implicit_invocation: false`.
-- Every skill except `ya` appears in the **Skills** table of `skills/ya/SKILL.md`, and every file in `skills/ya/playbooks/` appears in its **Playbooks** table. Nothing is unreachable from the entry point, and nothing in the tables is missing on disk.
+- Every skill except `yastack` appears in the **Skills** table of `skills/yastack/SKILL.md`, and every file in `skills/yastack/playbooks/` appears in its **Playbooks** table. Nothing is unreachable from the entry point, and nothing in the tables is missing on disk.
 - Every relative link in a skill or playbook resolves to a file.
 
 When you notice a new rule that keeps being broken, add it to `check.py` rather than to this file.
@@ -51,9 +51,11 @@ The two harness flags do different jobs:
 - Claude Code `disable-model-invocation: true` keeps the skill's description out of the model's context and blocks the `Skill` tool from calling it. The user can still run `/<name>`.
 - Codex `allow_implicit_invocation: false` keeps the skill out of the model's context. The user can still run `$<name>`.
 
-Because the model can't invoke routed skills through the `Skill` tool, `ya` loads them by path: playbooks at `playbooks/<name>.md` and skills at `../<name>/SKILL.md`, both relative to `skills/ya/SKILL.md`. A playbook step names a skill, and the agent reads that file at that step, not earlier. This keeps context small and makes every load visible in the transcript.
+Because the model can't invoke routed skills through the `Skill` tool, `yastack` loads them by path: playbooks at `playbooks/<name>.md` and skills at `../<name>/SKILL.md`, both relative to `skills/yastack/SKILL.md`. A playbook step names a skill, and the agent reads that file at that step, not earlier. This keeps context small and makes every load visible in the transcript.
 
 Subagents can't use slash commands. A brief that delegates a skill passes the skill file's absolute path and tells the subagent to read it.
+
+The entry point is named after the stack. If yastack is ever packaged as a Claude Code plugin named `yastack`, `/yastack` still works: a bare name resolves to the plugin skill, and `/yastack:yastack` is only needed when another skill has the same name (tested on Claude Code 2.1.325).
 
 ## Changing the stack
 
@@ -63,10 +65,10 @@ Adding or changing a skill or playbook:
 
 1. Prefer editing an existing playbook or skill over adding a new one. A new file needs a second real use case, not a hypothetical one.
 2. Write it tight. Keep only what the model would otherwise get wrong or do inconsistently: exact steps, gotchas, commands, output shapes. Cut general best practice, motivation, and padded examples.
-3. For a skill: create `skills/<name>/SKILL.md` with the frontmatter above and `agents/openai.yaml` (copy one from an existing skill). Add a row `` | `<name>` | <what it does> | `` to the Skills table in `skills/ya/SKILL.md`, and name the skill in the playbook step that uses it.
-4. For a playbook: create `skills/ya/playbooks/<name>.md` and add a row `` | `<name>` | <use for> | `` to the Playbooks table.
+3. For a skill: create `skills/<name>/SKILL.md` with the frontmatter above and `agents/openai.yaml` (copy one from an existing skill). Add a row `` | `<name>` | <what it does> | `` to the Skills table in `skills/yastack/SKILL.md`, and name the skill in the playbook step that uses it.
+4. For a playbook: create `skills/yastack/playbooks/<name>.md` and add a row `` | `<name>` | <use for> | `` to the Playbooks table.
 5. Run `python3 scripts/check.py`. The pre-commit hook runs it again on commit.
-6. Test it. Re-run the prompt from the original evidence in a fresh session, through `/ya`, and confirm the route and the behavior changed. Say in the commit message whether you did this.
+6. Test it. Re-run the prompt from the original evidence in a fresh session, through `/yastack`, and confirm the route and the behavior changed. Say in the commit message whether you did this.
 
 Removing is a feature. Suggest deleting a skill or playbook that hasn't been routed to in a while, or that a newer one supersedes.
 
