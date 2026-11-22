@@ -9,7 +9,7 @@ When the task matches no playbook, design one. The deliverable before any code i
 
 ## Start
 
-Open a todolist whose first item is to load the `principles` skill with `Skill` and follow it. Then add the phases below as todos.
+List the phases before you start. The first item is to load the `principles` skill with `Skill`, then read in full every principle file this skill links. Then come the phases below. If `TaskCreate` is available, loading it with `ToolSearch` if it is deferred, create one task per item.
 
 ## Phase A: Frame
 
@@ -30,7 +30,7 @@ Decompose into atomic, independently-landable units. Sequence riskiest-unknown-f
 - Decide what fans out. Parallelize only across seams, and give each worker its own worktree or branch (the [separate-before-serializing-shared-state](../principles/separate-before-serializing-shared-state.md) principle). Don't over-fan. Use subagents. Choose each subagent's reasoning level for the job. Always use standard speed, never fast. Run subagents locally, never in a cloud environment.
 - Write the designed phase list down. That list is what the human reviews.
 
-Then execute the design. Add its steps to the todolist as concrete items between the Phase C and Phase D entries. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.
+Then execute the design. Add its steps to the list as concrete items between the Phase C and Phase D entries, with a task for each if you created tasks. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.
 
 ## Phase C: Run the loop
 

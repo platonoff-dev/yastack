@@ -5,7 +5,9 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 
 # Arena
 
-Open a todolist with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
+List the phases (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything. If `TaskCreate` is available, loading it with `ToolSearch` if it is deferred, create one task per phase.
+
+Before Phase A, load the `principles` skill with `Skill`, then read in full every principle file this skill links.
 
 ## Phase A: Frame
 
@@ -14,18 +16,18 @@ Every candidate gets the same prompt, so the prompt is the contract.
 <!-- markdownlint-disable-next-line MD032 -->
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
-3. Use subagents. Spawn more runners when the arena covers multiple design directions.
-4. Give each candidate its own output location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the [Separate Before Serializing Shared State](../principles/separate-before-serializing-shared-state.md) principle.
+3. Use subagents. Run three candidates by default, never fewer than two. Spawn more runners when the arena covers multiple design directions.
+4. Give each candidate its own output location (`isolation: "worktree"` on its `Agent` call when it edits the repo, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the [Separate Before Serializing Shared State](../principles/separate-before-serializing-shared-state.md) principle.
 
 ## Phase B: Fan out
 
-Spawn all N subagents in parallel with `Agent`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` skill with `Skill` and to read each applicable principle file, passed by absolute path, first. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
+Spawn all N subagents with `Agent` in one message, with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` skill with `Skill` and to read each applicable principle file, passed by absolute path, first. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
 
 If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, spawn one readonly judge subagent. If the judge cannot run, skip the judge, pick the base alone in Phase D, and say so. The judge sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
+After all Phase B candidates complete, spawn one judge subagent and tell it not to edit files. If the judge cannot run, skip the judge, pick the base alone in Phase D, and say so. The judge sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
 
 ## Phase D: Pick a base
 

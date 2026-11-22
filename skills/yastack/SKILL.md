@@ -70,9 +70,9 @@ Comments follow the same rule as the reply. Write them clean as you go. Keep a c
 
 Match the task to one playbook below. If two fit, take the narrower one. In your first message, name the playbook you picked and why, in one line. Open its full steps at `playbooks/<name>.md`.
 
-Open a todolist whose first items are the matched playbook's steps, copied in verbatim, before any task-specific todos. A step you choose not to do stays in the list with a one-line `skip: <reason>`. When a step names a skill, load it with `Skill` at that step, not earlier, and follow it.
+In your first message, list the matched playbook's steps as a checklist, copied in verbatim, before any task-specific items. If `TaskCreate` is available, loading it with `ToolSearch` if it is deferred, also create one task per item. A step you choose not to do stays in the list with a one-line `skip: <reason>`. When a step names a skill, load it with `Skill` at that step, not earlier, and follow it.
 
-No playbook fits: do the task without one. End your final reply with one line, `yastack gap: <the kind of task this was>`, so the user can decide whether it deserves a playbook.
+No playbook fits → say so in your first message. If the task is a large migration, a change that will land as more than one PR, or a long run the user will review after stepping away, load the `figure-it-out` skill with `Skill` and let it design the playbook. Otherwise do the task without one. Either way, end your final reply with one line, `yastack gap: <the kind of task this was>`, so the user can decide whether it deserves a playbook.
 
 The user's own instructions in the task, or `CLAUDE.md` override a playbook step. Say which step you overrode.
 

@@ -9,13 +9,15 @@ Sketch types, function signatures, class shapes, and module boundaries with `not
 
 ## Start
 
-Open a todolist with one entry per phase before starting.
+List the phases before you start. If `TaskCreate` is available, loading it with `ToolSearch` if it is deferred, create one task per phase.
 
 1. Ground
 2. Sketch
 3. Agree
 4. Implement
 5. Scrap
+
+Before Phase A, load the `principles` skill with `Skill`, then read in full every principle file this skill links.
 
 ## Phase A: Ground the problem
 
@@ -27,7 +29,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` skill with `Skill` and to read each applicable principle file, passed by absolute path, first.
 
-Use `Agent` subagents with an available Opus model. Let the agent choose among the models Claude Code supports. Runners may use the same model.
+Use subagents. Runners may use the same model.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the [exhaust-the-design-space](../principles/exhaust-the-design-space.md) principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 

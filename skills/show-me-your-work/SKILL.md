@@ -7,6 +7,8 @@ description: "Keep a reviewable decision trail for long-running or unattended wo
 
 Keep one canonical log.
 
+Before you start, load the `principles` skill with `Skill`, then read in full every principle file this skill links.
+
 ## The format
 
 A single TSV file, one row per decision. Cells stay single-line. Evidence is a pointer, not prose.
