@@ -1,7 +1,6 @@
 ---
 name: auto-goal
 description: Keep working until a checkable condition holds. Runs the work in a headless `claude -p "/goal ..."` child session, then waits for it and verifies the result.
-disable-model-invocation: true
 ---
 
 # Auto goal

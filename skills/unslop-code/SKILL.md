@@ -1,7 +1,6 @@
 ---
 name: unslop-code
 description: Remove AI-generated code slop and clean up code style
-disable-model-invocation: true
 ---
 
 # Remove AI code slop

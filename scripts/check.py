@@ -13,6 +13,8 @@ LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
 PRINCIPLE_ITEM = re.compile(r"^- \[[^\]]+\]\(([a-z0-9-]+)\.md\)\.", re.M)
 OTHER_HARNESS = re.compile(r"\bcodex\b|spawn_agent|allow_implicit_invocation", re.I)
+SKILL_NAME = re.compile(r"`([a-z0-9-]+)`")
+SKILL_PATH = re.compile(r"(?<!\()\.\./(?:[a-z0-9-]+/)+SKILL\.md")
 TODOLIST = re.compile(r"\btodo[ -]?lists?\b", re.I)
 
 errors = []
@@ -60,17 +62,26 @@ for skill in skill_dirs:
         errors.append(f"{rel(md)}: name is {fm.get('name')!r}, expected {skill.name!r}")
     if not fm.get("description"):
         errors.append(f"{rel(md)}: empty description")
-    implicit = skill.name == PRINCIPLES
-    if (fm.get("disable-model-invocation") == "true") == implicit:
-        want = "no 'disable-model-invocation'" if implicit else "'disable-model-invocation: true'"
+    # Only the entry point is user-only. Every other skill must stay loadable with the Skill tool.
+    user_only = skill.name == ENTRY
+    if (fm.get("disable-model-invocation") == "true") != user_only:
+        want = "'disable-model-invocation: true'" if user_only else "no 'disable-model-invocation'"
         errors.append(f"{rel(md)}: needs {want}")
 
-    for doc in skill.rglob("*.md"):
-        for target in LINK.findall(doc.read_text()):
-            if "://" in target or target.startswith("mailto:"):
-                continue
-            if not (doc.parent / target).exists():
-                errors.append(f"{rel(doc)}: broken link {target}")
+# Skills load through the Skill tool, never as a file. Links stay inside one skill.
+for doc in sorted([*SKILLS.rglob("*.md"), *(ROOT / ".claude" / "skills").rglob("*.md")]):
+    text = doc.read_text()
+    home = next(p for p in doc.parents if (p / "SKILL.md").is_file())
+    for target in LINK.findall(text):
+        if "://" in target or target.startswith("mailto:"):
+            continue
+        dest = (doc.parent / target).resolve()
+        if not dest.exists():
+            errors.append(f"{rel(doc)}: broken link {target}")
+        elif dest.name == "SKILL.md" and dest.parent != home.resolve():
+            errors.append(f"{rel(doc)}: links {target}; name the skill and load it with Skill")
+    for path in SKILL_PATH.findall(text):
+        errors.append(f"{rel(doc)}: names {path}; name the skill and load it with Skill")
 
 # yastack is tuned to Claude Code only. Keep other harnesses out of every skill.
 for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*")]):
@@ -81,16 +92,14 @@ for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*"
     elif OTHER_HARNESS.search(path.read_text(errors="ignore")):
         errors.append(f"{rel(path)}: mentions Codex; yastack targets Claude Code only")
 
-# A bare principle link gets cited, not read. A skill that links one must link the index too.
+# A bare principle link gets cited, not read. A skill that links one must name the principles skill.
 PRINCIPLE_LINK = re.compile(r"\]\(\.\./principles/(?!SKILL\.md)[a-z0-9-]+\.md\)")
 for md in sorted(SKILLS.glob("*/SKILL.md")):
     if md.parent.name in (ENTRY, PRINCIPLES):
         continue
     text = md.read_text()
-    if PRINCIPLE_LINK.search(text) and "](../principles/SKILL.md)" not in text:
-        errors.append(
-            f"{rel(md)}: links a principle file but never sends the agent to the principles index"
-        )
+    if PRINCIPLE_LINK.search(text) and f"`{PRINCIPLES}` skill" not in text:
+        errors.append(f"{rel(md)}: links a principle file but never names the `principles` skill")
 
 # "Open a todolist" names no Claude Code tool. Use the router's checklist and TaskCreate rule.
 for path in sorted(SKILLS.rglob("*.md")):
@@ -130,12 +139,16 @@ if entry_md.is_file():
         if doc in seen or not doc.is_file():
             continue
         seen.add(doc)
-        for target in LINK.findall(doc.read_text()):
+        text = doc.read_text()
+        for target in LINK.findall(text):
             if "://" not in target and target.endswith(".md"):
                 todo.append(doc.parent / target)
+        for name in SKILL_NAME.findall(text):
+            if name in names | {PRINCIPLES}:
+                todo.append(SKILLS / name / "SKILL.md")
     reached = {d.relative_to(SKILLS).parts[0] for d in seen if d.is_relative_to(SKILLS)}
     for name in sorted(names - reached):
-        errors.append(f"skills/{name}: unreachable, nothing links to it from the entry point")
+        errors.append(f"skills/{name}: unreachable, nothing names it from the entry point")
 else:
     errors.append(f"skills/{ENTRY}/SKILL.md: entry point missing")
 
