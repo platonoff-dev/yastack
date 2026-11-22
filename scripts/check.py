@@ -8,9 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 ENTRY = "yastack"
-PRINCIPLE = "principle-"
+PRINCIPLES = "principles"
 LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
+PRINCIPLE_ITEM = re.compile(r"^- \[[^\]]+\]\(([a-z0-9-]+)\.md\)\.", re.M)
 
 errors = []
 
@@ -57,14 +58,17 @@ for skill in skill_dirs:
         errors.append(f"{rel(md)}: name is {fm.get('name')!r}, expected {skill.name!r}")
     if not fm.get("description"):
         errors.append(f"{rel(md)}: empty description")
-    if fm.get("disable-model-invocation") != "true":
-        errors.append(f"{rel(md)}: needs 'disable-model-invocation: true'")
+    implicit = skill.name == PRINCIPLES
+    if (fm.get("disable-model-invocation") == "true") == implicit:
+        want = "no 'disable-model-invocation'" if implicit else "'disable-model-invocation: true'"
+        errors.append(f"{rel(md)}: needs {want}")
 
     yaml = skill / "agents" / "openai.yaml"
+    flag = str(implicit).lower()
     if not yaml.is_file():
         errors.append(f"{rel(skill)}: no agents/openai.yaml")
-    elif not re.search(r"^\s+allow_implicit_invocation:\s*false\s*$", yaml.read_text(), re.M):
-        errors.append(f"{rel(yaml)}: needs 'policy.allow_implicit_invocation: false'")
+    elif not re.search(rf"^\s+allow_implicit_invocation:\s*{flag}\s*$", yaml.read_text(), re.M):
+        errors.append(f"{rel(yaml)}: needs 'policy.allow_implicit_invocation: {flag}'")
 
     for doc in skill.rglob("*.md"):
         for target in LINK.findall(doc.read_text()):
@@ -79,22 +83,27 @@ if entry_md.is_file():
     names = {p.name for p in skill_dirs} - {ENTRY}
     playbook_dir = SKILLS / ENTRY / "playbooks"
     playbooks = {p.stem for p in playbook_dir.glob("*.md")} if playbook_dir.is_dir() else set()
-    principles = {n for n in names if n.startswith(PRINCIPLE)}
 
-    for heading, present, kind in (
-        ("Playbooks", playbooks, "playbook"),
-        ("Principles", principles, "principle"),
-    ):
-        listed = section(text, heading)
+    listed = section(text, "Playbooks")
+    for name in sorted(playbooks - listed):
+        errors.append(f"playbook {name}: not under '## Playbooks' in the entry point")
+    for name in sorted(listed - playbooks):
+        errors.append(f"skills/{ENTRY}/SKILL.md: '## Playbooks' lists missing playbook {name!r}")
+
+    index = SKILLS / PRINCIPLES / "SKILL.md"
+    if index.is_file():
+        present = {p.stem for p in index.parent.glob("*.md")} - {"SKILL"}
+        listed = set(PRINCIPLE_ITEM.findall(index.read_text()))
         for name in sorted(present - listed):
-            errors.append(f"{kind} {name}: not under '## {heading}' in the entry point")
+            errors.append(
+                f"skills/{PRINCIPLES}/{name}.md: not listed as '- [Title]({name}.md).' in the index"
+            )
         for name in sorted(listed - present):
-            errors.append(f"skills/{ENTRY}/SKILL.md: '## {heading}' lists missing {kind} {name!r}")
+            errors.append(f"skills/{PRINCIPLES}/SKILL.md: lists missing principle {name!r}")
 
     seen = set()
     todo = [entry_md]
     todo += [playbook_dir / f"{n}.md" for n in playbooks]
-    todo += [SKILLS / n / "SKILL.md" for n in principles]
     while todo:
         doc = todo.pop().resolve()
         if doc in seen or not doc.is_file():
@@ -104,7 +113,7 @@ if entry_md.is_file():
             if "://" not in target and target.endswith(".md"):
                 todo.append(doc.parent / target)
     reached = {d.relative_to(SKILLS).parts[0] for d in seen if d.is_relative_to(SKILLS)}
-    for name in sorted(names - principles - reached):
+    for name in sorted(names - reached):
         errors.append(f"skills/{name}: unreachable, nothing links to it from the entry point")
 else:
     errors.append(f"skills/{ENTRY}/SKILL.md: entry point missing")

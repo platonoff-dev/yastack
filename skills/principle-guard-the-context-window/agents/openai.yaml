@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-guard-the-context-window"
-  short_description: "Route bulk to subagents and cap scope to protect context"
-  default_prompt: "Use $principle-guard-the-context-window on this task."
-policy:
-  allow_implicit_invocation: false

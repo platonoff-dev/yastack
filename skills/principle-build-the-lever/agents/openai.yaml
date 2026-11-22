@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-build-the-lever"
-  short_description: "Build a tool that does or proves non-trivial work"
-  default_prompt: "Use $principle-build-the-lever on this task."
-policy:
-  allow_implicit_invocation: false

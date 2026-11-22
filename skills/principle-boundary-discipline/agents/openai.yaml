@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-boundary-discipline"
-  short_description: "Concentrate guards at boundaries and keep business logic pure"
-  default_prompt: "Use $principle-boundary-discipline on this task."
-policy:
-  allow_implicit_invocation: false

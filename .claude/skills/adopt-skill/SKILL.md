@@ -50,7 +50,7 @@ Keep portable mechanisms such as git worktrees, conditional built-in PR-tool pre
 
 ## Wire and verify
 
-Use `skills/<name>/SKILL.md` for a skill, `skills/principle-<name>/SKILL.md` for a principle, or `skills/yastack/playbooks/<name>.md` for a playbook. Follow `AGENTS.md` for frontmatter, `agents/openai.yaml`, and the corresponding router entry or caller link. Add only wiring justified by the source or the user's request. Do not invent a new entry-point trigger for a leaf skill.
+Use `skills/<name>/SKILL.md` for a skill, `skills/principles/<name>.md` for a principle (no frontmatter, no `agents/openai.yaml`), or `skills/yastack/playbooks/<name>.md` for a playbook. Follow `AGENTS.md` for frontmatter, `agents/openai.yaml`, and the corresponding router entry or caller link. Add only wiring justified by the source or the user's request. Do not invent a new entry-point trigger for a leaf skill.
 
 Compare every copied file with its pinned source. Account for every changed span under an allowed exception. Revert unexplained differences. Verify local links, required dependencies, and any changed tool calls. Keep bundled scripts unchanged unless an allowed adaptation requires an edit. Do not execute fetched scripts just to inspect them.
 

@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-sequence-verifiable-units"
-  short_description: "Break work into small units that each end in a check"
-  default_prompt: "Use $principle-sequence-verifiable-units to plan this work."
-policy:
-  allow_implicit_invocation: false

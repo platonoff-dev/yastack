@@ -30,7 +30,7 @@ Run the [arena](../arena/SKILL.md) skill with the design-sketch task and the Pha
 
 Use harness-native subagents. In Claude Code, use `Agent` with an available Opus model. In Codex, use `spawn_agent` with an available Codex model. Let the agent choose among the models its harness supports. Runners may use the same model.
 
-Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the [exhaust-the-design-space](../principle-exhaust-the-design-space/SKILL.md) principle skill made concrete. Whole-shape alternatives, not point fixes inside one shape.
+Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the [exhaust-the-design-space](../principles/exhaust-the-design-space.md) principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 
 Screen every candidate against [`references/design-red-flags.md`](references/design-red-flags.md) before synthesis. Assume the next contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. Prefer the design where a change that looks right from one file is right for the whole repo.
 
@@ -44,7 +44,7 @@ Default: proceed directly to implementation with the synthesized design. No huma
 
 Opt in to a checkpoint when the invoker explicitly asks: "/architect with checkpoint," "stop and show me before implementing," or similar. Then surface the synthesized design and pause for sign-off.
 
-The synthesis can ship as its own commit either way, as the "scaffold first" mode of the [foundational-thinking](../principle-foundational-thinking/SKILL.md) principle skill. Planned and scoped breakage during fill-in is fine, per the [outcome-oriented-execution](../principle-outcome-oriented-execution/SKILL.md) principle skill. For adversarial pressure on the design before implementing, run the [interrogate](../interrogate/SKILL.md) skill on the synthesized sketch.
+The synthesis can ship as its own commit either way, as the "scaffold first" mode of the [foundational-thinking](../principles/foundational-thinking.md) principle. Planned and scoped breakage during fill-in is fine, per the [outcome-oriented-execution](../principles/outcome-oriented-execution.md) principle. For adversarial pressure on the design before implementing, run the [interrogate](../interrogate/SKILL.md) skill on the synthesized sketch.
 
 If the human pushes back on the shape (in a checkpoint or after the fact), treat that as Phase A evidence. Re-ground and re-run Phase B before writing more code.
 
@@ -54,7 +54,7 @@ Replace `not implemented` bodies with code, pseudocode with logic. The synthesiz
 
 ## Phase E: Scrap when the architecture is wrong
 
-If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per the [redesign-from-first-principles](../principle-redesign-from-first-principles/SKILL.md) and [fix-root-causes](../principle-fix-root-causes/SKILL.md) principle skills.
+If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per the [redesign-from-first-principles](../principles/redesign-from-first-principles.md) and [fix-root-causes](../principles/fix-root-causes.md) principles.
 
 The signal is a *pattern*, not single instances. Tells:
 
@@ -70,8 +70,8 @@ Use judgment. A few edge cases don't condemn an architecture. Some problems are 
 When you scrap:
 
 1. Trace what's been built.
-2. Redesign as if the new constraints had been day-one assumptions, per [redesign-from-first-principles](../principle-redesign-from-first-principles/SKILL.md).
-3. Subtract before adding, per the [subtract-before-you-add](../principle-subtract-before-you-add/SKILL.md) principle skill. The new sketch should be smaller than the old one before it grows.
+2. Redesign as if the new constraints had been day-one assumptions, per [redesign-from-first-principles](../principles/redesign-from-first-principles.md).
+3. Subtract before adding, per the [subtract-before-you-add](../principles/subtract-before-you-add.md) principle. The new sketch should be smaller than the old one before it grows.
 4. Return to Phase B and re-run arena.
 
 ## Outputs

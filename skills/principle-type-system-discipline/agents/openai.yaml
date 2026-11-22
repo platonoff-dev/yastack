@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-type-system-discipline"
-  short_description: "Make invalid states and mismatched domain primitives unrepresentable"
-  default_prompt: "Use $principle-type-system-discipline on these types."
-policy:
-  allow_implicit_invocation: false

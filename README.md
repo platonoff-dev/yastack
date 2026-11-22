@@ -5,7 +5,7 @@ Yes, yet another stack of AI skills. A personal skill stack for Claude Code and 
 Two ideas taken from [pstack](https://github.com/cursor/plugins/tree/main/pstack):
 
 - **One entry point.** Type `/yastack <task>` (Codex: `$yastack <task>`). It matches the task to a playbook and loads only the skills that playbook's steps name.
-- **Nothing triggers on its own.** Every skill turns off implicit invocation, so a skill runs only when you call it or `/yastack` routes to it.
+- **Nothing triggers on its own.** Every skill turns off implicit invocation, so a skill runs only when you call it or `/yastack` routes to it. The one exception is `principles`, an index of short cross-cutting rules that the model may load for any task.
 
 Everything else grows from real use, one observed failure at a time.
 

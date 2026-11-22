@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-make-operations-idempotent"
-  short_description: "Make repeated and interrupted operations converge to the same state"
-  default_prompt: "Use $principle-make-operations-idempotent to assess this operation."
-policy:
-  allow_implicit_invocation: false

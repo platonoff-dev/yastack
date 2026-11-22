@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-prove-it-works"
-  short_description: "Verify the real artifact instead of relying on proxies"
-  default_prompt: "Use $principle-prove-it-works to verify this task."
-policy:
-  allow_implicit_invocation: false

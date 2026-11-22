@@ -1,6 +1,0 @@
-interface:
-  display_name: "principle-minimize-reader-load"
-  short_description: "Collapse layers and hidden state that make code hard to trace"
-  default_prompt: "Use $principle-minimize-reader-load on this task."
-policy:
-  allow_implicit_invocation: false
