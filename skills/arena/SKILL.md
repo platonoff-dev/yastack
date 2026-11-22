@@ -1,7 +1,6 @@
 ---
 name: arena
 description: "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
-disable-model-invocation: true
 ---
 
 # Arena
@@ -20,7 +19,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 ## Phase B: Fan out
 
-Spawn all N subagents in parallel with `Agent`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Pass the absolute path of this skill and each applicable principle file, and tell each subagent to read them first.
+Spawn all N subagents in parallel with `Agent`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` skill with `Skill` and to read each applicable principle file, passed by absolute path, first. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
 
 If a candidate produces no output, proceed with N-1 and note the dropout.
 

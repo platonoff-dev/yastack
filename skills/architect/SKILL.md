@@ -1,7 +1,6 @@
 ---
 name: architect
 description: "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape."
-disable-model-invocation: true
 ---
 
 # Architect
@@ -20,13 +19,13 @@ Open a todolist with one entry per phase before starting.
 
 ## Phase A: Ground the problem
 
-Build a real mental model of every system the new code touches. Trace the relevant subsystems. Naming a file isn't grounding. Write an architectural explanation of each. If the design redefines ownership or layering, also run the [why](../why/SKILL.md) skill on the existing shape so the rationale becomes a constraint, not a guess.
+Build a real mental model of every system the new code touches. Trace the relevant subsystems. Naming a file isn't grounding. Write an architectural explanation of each. If the design redefines ownership or layering, also load the `why` skill with `Skill` and run it on the existing shape so the rationale becomes a constraint, not a guess.
 
 Skip Phase A only when the work is genuinely greenfield with no surrounding system to integrate.
 
 ## Phase B: Sketch
 
-Run the [arena](../arena/SKILL.md) skill with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Pass the absolute paths of this skill and each applicable principle file, and tell each runner to read them first.
+Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` skill with `Skill` and to read each applicable principle file, passed by absolute path, first.
 
 Use `Agent` subagents with an available Opus model. Let the agent choose among the models Claude Code supports. Runners may use the same model.
 
@@ -44,7 +43,7 @@ Default: proceed directly to implementation with the synthesized design. No huma
 
 Opt in to a checkpoint when the invoker explicitly asks: "/architect with checkpoint," "stop and show me before implementing," or similar. Then surface the synthesized design and pause for sign-off.
 
-The synthesis can ship as its own commit either way, as the "scaffold first" mode of the [foundational-thinking](../principles/foundational-thinking.md) principle. Planned and scoped breakage during fill-in is fine, per the [outcome-oriented-execution](../principles/outcome-oriented-execution.md) principle. For adversarial pressure on the design before implementing, run the [interrogate](../interrogate/SKILL.md) skill on the synthesized sketch.
+The synthesis can ship as its own commit either way, as the "scaffold first" mode of the [foundational-thinking](../principles/foundational-thinking.md) principle. Planned and scoped breakage during fill-in is fine, per the [outcome-oriented-execution](../principles/outcome-oriented-execution.md) principle. For adversarial pressure on the design before implementing, load the `interrogate` skill with `Skill` and run it on the synthesized sketch.
 
 If the human pushes back on the shape (in a checkpoint or after the fact), treat that as Phase A evidence. Re-ground and re-run Phase B before writing more code.
 

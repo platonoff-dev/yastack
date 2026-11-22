@@ -11,7 +11,7 @@ A principle is a short rule with a condition. Each one lives in its own file nex
 - The user names a principle → read its file, even if its condition looks unmet.
 - A condition can start to hold mid-task, such as a second failed fix or a number you are about to measure. Read the principle then.
 - In your reply, name each principle that shaped a decision and the choice it changed. Cite only principles whose file you read this session.
-- A subagent can't load this skill. A brief that needs a principle passes the file's absolute path and tells the subagent to read it.
+- A principle is a file, not a skill. A brief that needs a principle passes the file's absolute path and tells the subagent to read it.
 
 ## Core
 

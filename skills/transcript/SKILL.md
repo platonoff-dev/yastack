@@ -1,7 +1,6 @@
 ---
 name: transcript
 description: Find the exact transcript of the active Claude Code run, read it as a numbered digest, list its subagents' transcripts, and hand it to a reviewer.
-disable-model-invocation: true
 ---
 
 # Transcript

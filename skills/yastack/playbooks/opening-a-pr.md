@@ -8,7 +8,7 @@ Use this playbook to open, update, or stack a change request: a GitHub pull requ
 
 **Commits.** Commit liberally. Rebase into small, ordered commits before opening PRs. Each commit is a future PR: landable, ordered to tell the story. Amend when the fix belongs in a just-made commit. New commit when separable. Commit bodies don't restate the subject.
 
-**PRs.** Read and run [unslop-code](../../unslop-code/SKILL.md) over the diff before commit and [unslop-comments](../../unslop-comments/SKILL.md) before review. Write every PR title, description, and commit body with [technical-writing](../../technical-writing/SKILL.md) (every layer except Diátaxis, and apply the STE vocabulary rules: one word per action, keep articles, a plain verb over `-ing` where one works), then read and apply [unslop-prose](../../unslop-prose/SKILL.md).
+**PRs.** Load and run the `unslop-code` skill over the diff before commit and the `unslop-comments` skill before review. Write every PR title, description, and commit body with the `technical-writing` skill (every layer except Diátaxis, and apply the STE vocabulary rules: one word per action, keep articles, a plain verb over `-ing` where one works), then load and apply the `unslop-prose` skill.
 
 **Titles.** Conventional Commits `type(scope): subject`, no trailing period. Type such as `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, or `perf`. Scope is the area, such as `yastack`. Subject is short, imperative, and names a real symbol when one carries the change, for example `fix(yastack): retarget opening-a-pr babysit trigger`.
 
@@ -33,7 +33,7 @@ After the sections, attach videos or screenshots when they prove a claim. Full S
 
 **Babysit.** Opening a PR does not start a babysit. Post the URL and keep building. Finish the phase or stack first. Run a separate babysit pass only when the user asks for one after the whole stack exists. A babysit for each new PR stalls the build and spends checks on commits later waves restart. Push back when feedback drifts from intent.
 
-A subagent that opens a PR reads and runs [unslop-code](../../unslop-code/SKILL.md) and [unslop-comments](../../unslop-comments/SKILL.md), and posts the URL. It returns to the parent without babysitting.
+A subagent that opens a PR loads and runs the `unslop-code` and `unslop-comments` skills, and posts the URL. It returns to the parent without babysitting.
 
 ## Forge commands
 

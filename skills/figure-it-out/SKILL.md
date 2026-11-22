@@ -1,7 +1,6 @@
 ---
 name: figure-it-out
 description: "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
-disable-model-invocation: true
 ---
 
 # Figure it out
@@ -10,7 +9,7 @@ When the task matches no playbook, design one. The deliverable before any code i
 
 ## Start
 
-Open a todolist whose first item is to read the Principles section of the [yastack](../yastack/SKILL.md) skill. Then add the phases below as todos.
+Open a todolist whose first item is to load the `principles` skill with `Skill` and follow it. Then add the phases below as todos.
 
 ## Phase A: Frame
 
@@ -27,7 +26,7 @@ Present the framing and tradeoffs before committing to a long run. Reversible wo
 Decompose into atomic, independently-landable units. Sequence riskiest-unknown-first. Scaffold and verification come before features (the [foundational-thinking](../principles/foundational-thinking.md) principle).
 
 - Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as "old value vs new value".
-- For one-way-door design decisions, run the [architect](../architect/SKILL.md) skill (it runs [arena](../arena/SKILL.md)). Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (the [laziness-protocol](../principles/laziness-protocol.md) principle).
+- For one-way-door design decisions, load the `architect` skill with `Skill` and run it (it runs `arena`). Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (the [laziness-protocol](../principles/laziness-protocol.md) principle).
 - Decide what fans out. Parallelize only across seams, and give each worker its own worktree or branch (the [separate-before-serializing-shared-state](../principles/separate-before-serializing-shared-state.md) principle). Don't over-fan. Use subagents. Choose each subagent's reasoning level for the job. Always use standard speed, never fast. Run subagents locally, never in a cloud environment.
 - Write the designed phase list down. That list is what the human reviews.
 
@@ -43,7 +42,7 @@ Each unit is an experiment. State the hypothesis, make the smallest change, meas
 
 ## Phase D: Keep the audit trail
 
-Log the run via the [show-me-your-work](../show-me-your-work/SKILL.md) skill. figure-it-out's work is usually ambitious enough to commit the trail so the reviewer can read it in the PR. The trail plus the diff is what lets the human come back and trust the work.
+Log the run via the `show-me-your-work` skill. Load it with `Skill`. figure-it-out's work is usually ambitious enough to commit the trail so the reviewer can read it in the PR. The trail plus the diff is what lets the human come back and trust the work.
 
 ## Phase E: Verify and hand back
 
