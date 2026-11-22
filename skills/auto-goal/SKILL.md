@@ -1,6 +1,6 @@
 ---
 name: auto-goal
-description: Keep working until a checkable condition holds. Arms a goal with the create_goal tool in Codex, or runs the work in a headless `claude -p "/goal ..."` child session in Claude Code, then waits for it and verifies the result.
+description: Keep working until a checkable condition holds. Runs the work in a headless `claude -p "/goal ..."` child session, then waits for it and verifies the result.
 disable-model-invocation: true
 ---
 
@@ -16,15 +16,7 @@ Use this when work must continue until a condition holds: a stubborn bug hunt, "
 - Claude Code's evaluator judges from the conversation alone. It cannot run commands or read files. Name a check whose output will appear in the transcript.
 - Never relax the condition to declare victory.
 
-## Codex
-
-1. Call the `create_goal` tool with the condition as `objective`. This step is the explicit request the tool requires. Omit `token_budget` unless the user gave one.
-2. Work toward the goal in this thread. Codex keeps the goal active across turns.
-3. Call `update_goal` with status `complete` only after the check passes. Follow the tool's own rules for `blocked` and `paused`.
-
-If `create_goal` is not available, say so in the reply and keep working in the current turn.
-
-## Claude Code
+## Run the goal
 
 The model cannot set `/goal` in its own session. Run the goal work in a headless child session instead.
 
@@ -56,4 +48,4 @@ The model cannot set `/goal` in its own session. Run the goal work in a headless
 
 ## Reply
 
-The condition, the mechanism (Codex goal or Claude child session id), how many runs it took, the final check output, and whether the condition holds.
+The condition, the child session id, how many runs it took, the final check output, and whether the condition holds.

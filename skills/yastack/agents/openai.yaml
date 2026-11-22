@@ -1,6 +1,0 @@
-interface:
-  display_name: "yastack"
-  short_description: "yastack entry point: route a task to a playbook"
-  default_prompt: "Use $yastack to route and do this task: "
-policy:
-  allow_implicit_invocation: false

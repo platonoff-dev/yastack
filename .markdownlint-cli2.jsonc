@@ -5,6 +5,4 @@
     // Catalog tables in skills/yastack grow one row at a time; don't require column alignment.
     "MD060": { "style": "compact" }
   },
-  // CLAUDE.md is a single `@AGENTS.md` import line, not a document.
-  "ignores": ["CLAUDE.md"]
 }

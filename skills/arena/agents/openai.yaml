@@ -1,6 +1,0 @@
-interface:
-  display_name: "Arena"
-  short_description: "Compare parallel candidates and synthesize one artifact"
-  default_prompt: "Use $arena to produce parallel candidates and synthesize the strongest result."
-policy:
-  allow_implicit_invocation: false

@@ -20,7 +20,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 ## Phase B: Fan out
 
-Spawn all N subagents in parallel with `Agent` in Claude Code or `spawn_agent` in Codex, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Pass the absolute path of this skill and each applicable principle file, and tell each subagent to read them first.
+Spawn all N subagents in parallel with `Agent`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Pass the absolute path of this skill and each applicable principle file, and tell each subagent to read them first.
 
 If a candidate produces no output, proceed with N-1 and note the dropout.
 

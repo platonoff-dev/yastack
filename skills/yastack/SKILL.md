@@ -74,7 +74,7 @@ Open a todolist whose first items are the matched playbook's steps, copied in ve
 
 No playbook fits: do the task without one. End your final reply with one line, `yastack gap: <the kind of task this was>`, so the user can decide whether it deserves a playbook.
 
-The user's own instructions in the task, `AGENTS.md`, or `CLAUDE.md` override a playbook step. Say which step you overrode.
+The user's own instructions in the task, or `CLAUDE.md` override a playbook step. Say which step you overrode.
 
 - **Investigation** (`investigation`). A read-only question that needs a cited explanation or a recommendation.
 - **Bug fix** (`bug-fix`). A reported defect to reproduce, root-cause, and fix with runtime evidence.
@@ -98,7 +98,7 @@ For an explicit request to run one of these skills, read its linked file.
 - [swarm](../swarm/SKILL.md). Fan out parallel workers across slices or race arms and return one report.
 - [control-cli](../control-cli/SKILL.md). Build or adapt a local harness to drive, inspect, and profile an interactive CLI or TUI.
 - [control-ui](../control-ui/SKILL.md). Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI.
-- [auto-goal](../auto-goal/SKILL.md). Keep working until a checkable condition holds, with a Codex goal or a headless Claude `/goal` session.
+- [auto-goal](../auto-goal/SKILL.md). Keep working until a checkable condition holds, with a headless Claude Code `/goal` session.
 - [transcript](../transcript/SKILL.md). Find, read, and hand a reviewer the exact transcript of the active run.
 - [show-me-your-work](../show-me-your-work/SKILL.md). Keep and audit a reviewable decision trail for long-running or unattended work.
 - [figure-it-out](../figure-it-out/SKILL.md). Design and run an auditable workflow when no narrower playbook fits.

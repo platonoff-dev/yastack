@@ -1,6 +1,0 @@
-interface:
-  display_name: "show-me-your-work"
-  short_description: "Keep and audit a reviewable decision trail"
-  default_prompt: "Use $show-me-your-work to keep and audit a decision trail for this run."
-policy:
-  allow_implicit_invocation: false

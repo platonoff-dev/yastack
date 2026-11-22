@@ -1,6 +1,0 @@
-interface:
-  display_name: "unslop-code"
-  short_description: "Remove AI slop from the code a branch adds"
-  default_prompt: "Use $unslop-code on this branch's diff."
-policy:
-  allow_implicit_invocation: false

@@ -28,7 +28,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Run the [arena](../arena/SKILL.md) skill with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Pass the absolute paths of this skill and each applicable principle file, and tell each runner to read them first.
 
-Use harness-native subagents. In Claude Code, use `Agent` with an available Opus model. In Codex, use `spawn_agent` with an available Codex model. Let the agent choose among the models its harness supports. Runners may use the same model.
+Use `Agent` subagents with an available Opus model. Let the agent choose among the models Claude Code supports. Runners may use the same model.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the [exhaust-the-design-space](../principles/exhaust-the-design-space.md) principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 

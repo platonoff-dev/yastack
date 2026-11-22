@@ -1,6 +1,0 @@
-interface:
-  display_name: "Swarm"
-  short_description: "Fan out parallel workers and return one report"
-  default_prompt: "Use $swarm to fan out parallel workers across slices or race arms and return one consolidated report."
-policy:
-  allow_implicit_invocation: false

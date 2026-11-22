@@ -1,6 +1,0 @@
-interface:
-  display_name: "principles"
-  short_description: "Index of yastack principles and when each applies"
-  default_prompt: "Use $principles to pick the principles for this task."
-policy:
-  allow_implicit_invocation: true

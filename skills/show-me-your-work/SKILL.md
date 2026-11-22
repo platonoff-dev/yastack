@@ -66,7 +66,7 @@ Correct the log, not the story. The audit never edits or removes a row, even an 
 
 ## Cross-model review of the trail
 
-Before handing back, use subagents. Self-review is not a substitute. The subagent reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Use `Agent` in Claude Code or `spawn_agent` in Codex. Choose each subagent's model and reasoning level for the job. Always use standard speed, never fast. Run subagents locally, never in a cloud environment.
+Before handing back, use subagents. Self-review is not a substitute. The subagent reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Use `Agent`. Choose each subagent's model and reasoning level for the job. Always use standard speed, never fast. Run subagents locally, never in a cloud environment.
 
 - Decisions logged with weak or absent evidence.
 - Verification steps skipped or claimed without proof in the transcript.

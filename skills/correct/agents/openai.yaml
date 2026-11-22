@@ -1,6 +1,0 @@
-interface:
-  display_name: "correct"
-  short_description: "Prevent repeated agent mistakes with structural checks"
-  default_prompt: "Use $correct to prevent repeated mistakes in this repository."
-policy:
-  allow_implicit_invocation: false

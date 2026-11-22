@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate yastack invariants. See AGENTS.md#invariants."""
+"""Validate yastack invariants. See CLAUDE.md#invariants."""
 
 import re
 import sys
@@ -12,6 +12,7 @@ PRINCIPLES = "principles"
 LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
 PRINCIPLE_ITEM = re.compile(r"^- \[[^\]]+\]\(([a-z0-9-]+)\.md\)\.", re.M)
+OTHER_HARNESS = re.compile(r"\bcodex\b|spawn_agent|allow_implicit_invocation", re.I)
 
 errors = []
 
@@ -63,19 +64,21 @@ for skill in skill_dirs:
         want = "no 'disable-model-invocation'" if implicit else "'disable-model-invocation: true'"
         errors.append(f"{rel(md)}: needs {want}")
 
-    yaml = skill / "agents" / "openai.yaml"
-    flag = str(implicit).lower()
-    if not yaml.is_file():
-        errors.append(f"{rel(skill)}: no agents/openai.yaml")
-    elif not re.search(rf"^\s+allow_implicit_invocation:\s*{flag}\s*$", yaml.read_text(), re.M):
-        errors.append(f"{rel(yaml)}: needs 'policy.allow_implicit_invocation: {flag}'")
-
     for doc in skill.rglob("*.md"):
         for target in LINK.findall(doc.read_text()):
             if "://" in target or target.startswith("mailto:"):
                 continue
             if not (doc.parent / target).exists():
                 errors.append(f"{rel(doc)}: broken link {target}")
+
+# yastack is tuned to Claude Code only. Keep other harnesses out of every skill.
+for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*")]):
+    if not path.is_file():
+        continue
+    if path.name == "openai.yaml":
+        errors.append(f"{rel(path)}: Codex metadata; yastack targets Claude Code only")
+    elif OTHER_HARNESS.search(path.read_text(errors="ignore")):
+        errors.append(f"{rel(path)}: mentions Codex; yastack targets Claude Code only")
 
 entry_md = SKILLS / ENTRY / "SKILL.md"
 if entry_md.is_file():

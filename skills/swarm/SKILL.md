@@ -24,7 +24,7 @@ Open a todolist with one entry per phase before launching anything.
 
 ## Phase B: Fan out
 
-Spawn all N workers in one message as general-purpose subagents, with `Agent` in Claude Code or `spawn_agent` in Codex. Run them in the background, locally.
+Spawn all N workers in one message as general-purpose subagents, with `Agent`. Run them in the background, locally.
 
 When a worker must start from a non-default branch, give it a git worktree on that branch.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Link every yastack skill into the Claude Code and Codex user skill dirs.
+# Link every yastack skill into the Claude Code user skill dir.
 # Usage: scripts/install.sh [--uninstall]
 set -euo pipefail
 
@@ -10,7 +10,7 @@ if [[ "$repo" != "$(cd "$main" && pwd -P)" ]]; then
   exit 1
 fi
 
-targets=("$HOME/.claude/skills" "$HOME/.agents/skills")
+targets=("$HOME/.claude/skills")
 uninstall=false
 [[ "${1:-}" == "--uninstall" ]] && uninstall=true
 

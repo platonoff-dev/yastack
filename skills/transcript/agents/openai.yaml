@@ -1,6 +1,0 @@
-interface:
-  display_name: "Transcript"
-  short_description: "Find and read the active run's transcript"
-  default_prompt: "Use $transcript to find and read this run's transcript."
-policy:
-  allow_implicit_invocation: false

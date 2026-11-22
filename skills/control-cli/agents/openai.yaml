@@ -1,6 +1,0 @@
-interface:
-  display_name: "control-cli"
-  short_description: "Drive and profile interactive CLI and TUI flows"
-  default_prompt: "Use $control-cli to build or adapt a local harness for this interactive CLI."
-policy:
-  allow_implicit_invocation: false
