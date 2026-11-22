@@ -7,7 +7,7 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 
 List the phases (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything. If `TaskCreate` is available, loading it with `ToolSearch` if it is deferred, create one task per phase.
 
-Before Phase A, load the `principles` skill with `Skill`, then read in full every principle file this skill links.
+Before Phase A, load the `principles` skill with `Skill`, then read in full every principle this skill names.
 
 ## Phase A: Frame
 
@@ -17,11 +17,11 @@ Every candidate gets the same prompt, so the prompt is the contract.
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
 3. Use subagents. Run three candidates by default, never fewer than two. Spawn more runners when the arena covers multiple design directions.
-4. Give each candidate its own output location (`isolation: "worktree"` on its `Agent` call when it edits the repo, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the [Separate Before Serializing Shared State](../principles/separate-before-serializing-shared-state.md) principle.
+4. Give each candidate its own output location (`isolation: "worktree"` on its `Agent` call when it edits the repo, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the `separate-before-serializing-shared-state` principle.
 
 ## Phase B: Fan out
 
-Spawn all N subagents with `Agent` in one message, with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` skill with `Skill` and to read each applicable principle file, passed by absolute path, first. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
+Spawn all N subagents with `Agent` in one message, with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
 
 If a candidate produces no output, proceed with N-1 and note the dropout.
 
@@ -33,17 +33,17 @@ After all Phase B candidates complete, spawn one judge subagent and tell it not 
 
 Read every candidate end to end before picking. Score each against the rubric criterion by criterion, not on holistic feel, and compare with the cross-judge when Phase C ran one. Agreement on the base confirms the pick. Disagreement means one of you is biased or the rubric was ambiguous. Read both rationales before deciding.
 
-Pick the base a future maintainer can extend most easily without breaking invariants. When two feel tied, prefer the cleaner boundary or smaller API, per the [Laziness Protocol](../principles/laziness-protocol.md).
+Pick the base a future maintainer can extend most easily without breaking invariants. When two feel tied, prefer the cleaner boundary or smaller API, per the `laziness-protocol` principle.
 
 ## Phase E: Graft
 
-Walk each losing candidate once more for what is worth porting into the base, usually one or two things per candidate, not most of it. Fold each graft in by hand, per the [Redesign From First Principles](../principles/redesign-from-first-principles.md) principle, so the result stays coherent under one mental model. Don't paste mechanically.
+Walk each losing candidate once more for what is worth porting into the base, usually one or two things per candidate, not most of it. Fold each graft in by hand, per the `redesign-from-first-principles` principle, so the result stays coherent under one mental model. Don't paste mechanically.
 
 If the candidates converge on one shape, that is strong agreement. Note it and ship the consensus shape. No graft is needed. If they wildly diverge, Phase A was under-specified. Reframe and re-run rather than averaging the divergence.
 
 ## Phase F: Verify
 
-Verify the synthesized artifact like any other output, per the [Prove It Works](../principles/prove-it-works.md) principle. If verification finds a problem the arena missed, either Phase A was wrong (re-frame and re-run) or a candidate caught it and you missed the graft (go back to Phase E). Don't paper over it.
+Verify the synthesized artifact like any other output, per the `prove-it-works` principle. If verification finds a problem the arena missed, either Phase A was wrong (re-frame and re-run) or a candidate caught it and you missed the graft (go back to Phase E). Don't paper over it.
 
 ## Outputs
 

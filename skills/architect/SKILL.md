@@ -17,7 +17,7 @@ List the phases before you start. If `TaskCreate` is available, loading it with 
 4. Implement
 5. Scrap
 
-Before Phase A, load the `principles` skill with `Skill`, then read in full every principle file this skill links.
+Before Phase A, load the `principles` skill with `Skill`, then read in full every principle this skill names.
 
 ## Phase A: Ground the problem
 
@@ -27,11 +27,11 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 ## Phase B: Sketch
 
-Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` skill with `Skill` and to read each applicable principle file, passed by absolute path, first.
+Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job.
 
 Use subagents. Runners may use the same model.
 
-Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the [exhaust-the-design-space](../principles/exhaust-the-design-space.md) principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
+Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the `exhaust-the-design-space` principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 
 Screen every candidate against [`references/design-red-flags.md`](references/design-red-flags.md) before synthesis. Assume the next contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. Prefer the design where a change that looks right from one file is right for the whole repo.
 
@@ -45,7 +45,7 @@ Default: proceed directly to implementation with the synthesized design. No huma
 
 Opt in to a checkpoint when the invoker explicitly asks: "/architect with checkpoint," "stop and show me before implementing," or similar. Then surface the synthesized design and pause for sign-off.
 
-The synthesis can ship as its own commit either way, as the "scaffold first" mode of the [foundational-thinking](../principles/foundational-thinking.md) principle. Planned and scoped breakage during fill-in is fine, per the [outcome-oriented-execution](../principles/outcome-oriented-execution.md) principle. For adversarial pressure on the design before implementing, load the `interrogate` skill with `Skill` and run it on the synthesized sketch.
+The synthesis can ship as its own commit either way, as the "scaffold first" mode of the `foundational-thinking` principle. Planned and scoped breakage during fill-in is fine, per the `outcome-oriented-execution` principle. For adversarial pressure on the design before implementing, load the `interrogate` skill with `Skill` and run it on the synthesized sketch.
 
 If the human pushes back on the shape (in a checkpoint or after the fact), treat that as Phase A evidence. Re-ground and re-run Phase B before writing more code.
 
@@ -55,7 +55,7 @@ Replace `not implemented` bodies with code, pseudocode with logic. The synthesiz
 
 ## Phase E: Scrap when the architecture is wrong
 
-If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per the [redesign-from-first-principles](../principles/redesign-from-first-principles.md) and [fix-root-causes](../principles/fix-root-causes.md) principles.
+If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per the `redesign-from-first-principles` and `fix-root-causes` principles.
 
 The signal is a *pattern*, not single instances. Tells:
 
@@ -71,8 +71,8 @@ Use judgment. A few edge cases don't condemn an architecture. Some problems are 
 When you scrap:
 
 1. Trace what's been built.
-2. Redesign as if the new constraints had been day-one assumptions, per [redesign-from-first-principles](../principles/redesign-from-first-principles.md).
-3. Subtract before adding, per the [subtract-before-you-add](../principles/subtract-before-you-add.md) principle. The new sketch should be smaller than the old one before it grows.
+2. Redesign as if the new constraints had been day-one assumptions, per the `redesign-from-first-principles` principle.
+3. Subtract before adding, per the `subtract-before-you-add` principle. The new sketch should be smaller than the old one before it grows.
 4. Return to Phase B and re-run arena.
 
 ## Outputs

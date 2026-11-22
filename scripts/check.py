@@ -14,7 +14,8 @@ ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
 PRINCIPLE_ITEM = re.compile(r"^- \[[^\]]+\]\(([a-z0-9-]+)\.md\)\.", re.M)
 OTHER_HARNESS = re.compile(r"\bcodex\b|spawn_agent|allow_implicit_invocation", re.I)
 SKILL_NAME = re.compile(r"`([a-z0-9-]+)`")
-SKILL_PATH = re.compile(r"(?<!\()\.\./(?:[a-z0-9-]+/)+SKILL\.md")
+UP_PATH = re.compile(r"(?<![\w./])(?:\.\./)+[^\s)`'\"]+")
+PRINCIPLE_REF = re.compile(r"((?:`[a-z0-9-]+`(?:,? and |,? or |, ))*`[a-z0-9-]+`) principles?\b")
 TODOLIST = re.compile(r"\btodo[ -]?lists?\b", re.I)
 
 errors = []
@@ -68,20 +69,26 @@ for skill in skill_dirs:
         want = "'disable-model-invocation: true'" if user_only else "no 'disable-model-invocation'"
         errors.append(f"{rel(md)}: needs {want}")
 
-# Skills load through the Skill tool, never as a file. Links stay inside one skill.
+# A path resolves only against the loaded skill's base directory, so links and paths stay inside
+# one skill. Reach a skill with Skill, a principle through the principles skill, a playbook only
+# from yastack.
 for doc in sorted([*SKILLS.rglob("*.md"), *(ROOT / ".claude" / "skills").rglob("*.md")]):
     text = doc.read_text()
-    home = next(p for p in doc.parents if (p / "SKILL.md").is_file())
-    for target in LINK.findall(text):
-        if "://" in target or target.startswith("mailto:"):
-            continue
-        dest = (doc.parent / target).resolve()
-        if not dest.exists():
+    home = next(p for p in doc.parents if (p / "SKILL.md").is_file()).resolve()
+    targets = [t for t in LINK.findall(text) if "://" not in t and not t.startswith("mailto:")]
+    for target in dict.fromkeys([*targets, *UP_PATH.findall(text)]):
+        dest = (doc.parent / target.split("#")[0]).resolve()
+        if not dest.is_relative_to(home):
+            fix = "name the skill"
+            if PRINCIPLES in dest.parts:
+                fix = "name the principle"
+            elif "playbooks" in dest.parts:
+                fix = "put the rule in this skill"
+            errors.append(f"{rel(doc)}: {target} leaves {home.name}/; {fix} instead")
+        elif target in targets and not dest.exists():
             errors.append(f"{rel(doc)}: broken link {target}")
-        elif dest.name == "SKILL.md" and dest.parent != home.resolve():
-            errors.append(f"{rel(doc)}: links {target}; name the skill and load it with Skill")
-    for path in SKILL_PATH.findall(text):
-        errors.append(f"{rel(doc)}: names {path}; name the skill and load it with Skill")
+    if doc.is_relative_to(SKILLS) and home.name != ENTRY and "playbooks/" in text:
+        errors.append(f"{rel(doc)}: refers to a playbook; only {ENTRY} can locate one")
 
 # yastack is tuned to Claude Code only. Keep other harnesses out of every skill.
 for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*")]):
@@ -92,14 +99,24 @@ for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*"
     elif OTHER_HARNESS.search(path.read_text(errors="ignore")):
         errors.append(f"{rel(path)}: mentions Codex; yastack targets Claude Code only")
 
-# A bare principle link gets cited, not read. A skill that links one must name the principles skill.
-PRINCIPLE_LINK = re.compile(r"\]\(\.\./principles/(?!SKILL\.md)[a-z0-9-]+\.md\)")
-for md in sorted(SKILLS.glob("*/SKILL.md")):
-    if md.parent.name in (ENTRY, PRINCIPLES):
+# Outside the index, a principle is "the `<name>` principle". Its skill loads the principles skill,
+# because a name alone gets cited, not read.
+principle_names = {p.stem for p in (SKILLS / PRINCIPLES).glob("*.md")} - {"SKILL"}
+for skill in skill_dirs:
+    if skill.name == PRINCIPLES:
         continue
-    text = md.read_text()
-    if PRINCIPLE_LINK.search(text) and f"`{PRINCIPLES}` skill" not in text:
-        errors.append(f"{rel(md)}: links a principle file but never names the `principles` skill")
+    named = False
+    for doc in sorted(skill.rglob("*.md")):
+        text = doc.read_text()
+        refs = {n for group in PRINCIPLE_REF.findall(text) for n in SKILL_NAME.findall(group)}
+        for name in sorted(refs - principle_names - {p.name for p in skill_dirs}):
+            errors.append(f"{rel(doc)}: names missing principle {name!r}")
+        for name in sorted(set(SKILL_NAME.findall(text)) & principle_names - refs):
+            errors.append(f"{rel(doc)}: write `{name}` as 'the `{name}` principle'")
+        named |= bool(refs & principle_names)
+    text = "".join(d.read_text() for d in skill.rglob("*.md"))
+    if named and f"`{PRINCIPLES}` skill" not in text:
+        errors.append(f"skills/{skill.name}: names a principle but never the `principles` skill")
 
 # "Open a todolist" names no Claude Code tool. Use the router's checklist and TaskCreate rule.
 for path in sorted(SKILLS.rglob("*.md")):

@@ -7,11 +7,13 @@ description: "Index of short engineering rules (principles), each with the condi
 
 A principle is a short rule with a condition. Each one lives in its own file next to this one. This file is the index.
 
+Other skills and playbooks name a principle as the `<name>` principle. Its file is `<name>.md` in this skill's base directory, linked below. Read it from there. Never resolve a principle path relative to another skill or to the working directory.
+
 - Match the task against the conditions below. Read the file of each principle whose condition holds, in full, before you act on it. Skip the rest.
-- The user names a principle → read its file, even if its condition looks unmet.
+- The user names a principle, or a skill or playbook step you are on names the `<name>` principle → read its file, even if its condition looks unmet.
 - A condition can start to hold mid-task, such as a second failed fix or a number you are about to measure. Read the principle then.
 - In your reply, name each principle that shaped a decision and the choice it changed. Cite only principles whose file you read this session.
-- A principle is a file, not a skill. A brief that needs a principle passes the file's absolute path and tells the subagent to read it.
+- A principle is a file, not a skill. A brief that needs a principle names it as the `<name>` principle and tells the subagent to load the `principles` skill with `Skill` and read it.
 
 ## Core
 

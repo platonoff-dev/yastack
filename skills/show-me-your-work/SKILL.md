@@ -7,7 +7,7 @@ description: "Keep a reviewable decision trail for long-running or unattended wo
 
 Keep one canonical log.
 
-Before you start, load the `principles` skill with `Skill`, then read in full every principle file this skill links.
+Before you start, load the `principles` skill with `Skill`, then read in full every principle this skill names.
 
 ## The format
 
@@ -53,7 +53,7 @@ Commit it only when the work is ambitious enough that a reviewer needs the trail
 ## Rules
 
 - Append-only. A wrong call gets a new row that supersedes it. Never edit or delete history.
-- Prefer evidence produced by committed scripts over hand-made one-offs (the [Encode Lessons in Structure](../principles/encode-lessons-in-structure.md) principle).
+- Prefer evidence produced by committed scripts over hand-made one-offs (the `encode-lessons-in-structure` principle).
 
 ## Audit the log against the transcript
 
