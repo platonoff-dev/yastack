@@ -15,7 +15,7 @@
 
    When an earlier mantra meets the target, stop.
 3. Plan the fix from the trace. Delegate implementation to a subagent. Review the diff. Capture a post-fix trace.
-   Apply the [sequence-verifiable-units](../../principles/sequence-verifiable-units.md) principle, verifying each attempt before trying the next.
+   Apply the `sequence-verifiable-units` principle, verifying each attempt before trying the next.
 4. Parse and compare the artifacts (JSON to sqlite, diff). "Inconclusive" or wrong-surface is not a pass. Flag it.
 5. Cite the measurement in the PR.
 6. Run [Opening a PR](opening-a-pr.md).

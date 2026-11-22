@@ -44,8 +44,8 @@ scripts/
 - Every file in `skills/yastack/playbooks/` is listed under **Playbooks** in `skills/yastack/SKILL.md` as `` - **Title** (`<name>`). <when> ``. Nothing listed is missing on disk.
 - Every `skills/principles/<name>.md` is listed in `skills/principles/SKILL.md` as `` - [Title](<name>.md). <when> ``. Nothing listed is missing on disk.
 - Every other skill is reachable: the entry point, a playbook, or a skill one of those names refers to it as `` `<name>` ``.
-- Every relative link in a skill or playbook resolves to a file.
-- No file links to another skill's `SKILL.md` or names a `../<name>/SKILL.md` path. Refer to a skill as the `` `<name>` `` skill.
+- Every relative link in a skill or playbook resolves to a file inside the same skill's directory. Refer to a skill as the `` `<name>` `` skill and to a principle as the `` `<name>` `` principle. No skill outside `yastack` refers to a playbook.
+- Every `` `<name>` `` principle names a file in `skills/principles/`. A skill that names one also names the `principles` skill.
 - No skill mentions Codex or ships `agents/openai.yaml`. yastack targets Claude Code only.
 
 When you notice a new rule that keeps being broken, add it to `check.py` rather than to this file.
@@ -56,9 +56,14 @@ When you notice a new rule that keeps being broken, add it to `check.py` rather 
 
 `disable-model-invocation: true` keeps the skill's description out of the model's context and blocks the `Skill` tool from calling it. The user can still run `/<name>`. Only `yastack` sets it.
 
-Three things name a skill, and the agent loads it only then: a non-negotiable in the entry point ("before commit → `unslop-code`"), a principle whose condition holds, or a playbook step. Playbooks and principles are files, not skills. The agent reads them by path: playbooks at `playbooks/<name>.md` and principles at `../principles/<name>.md`, both relative to `skills/yastack/SKILL.md`. Every load stays visible in the transcript.
+Three things name a skill, and the agent loads it only then: a non-negotiable in the entry point ("before commit → `unslop-code`"), a principle whose condition holds, or a playbook step. Every load stays visible in the transcript.
 
-Subagents spawned with `Agent` can't use slash commands, but they have the `Skill` tool. A brief that delegates a skill names it and tells the subagent to load it with `Skill`. A brief passes an absolute path only for a file that is not a skill, such as a playbook, a principle, or a reference. A subagent that loads a fan-out skill (`arena`, `architect`, `interrogate`) as context is one worker in it. Its brief names that role and tells it not to fan out again.
+**Never reach into another skill's directory by path.** A relative path resolves only against the base directory the harness prints for the skill it just loaded. A path into a sibling skill works only by accident of the install layout, and the agent can resolve it against the working directory instead. So:
+
+- **Principles** are files inside the `principles` skill. Everywhere else, name one as "the `` `<name>` `` principle". The agent loads the `principles` skill with `Skill`, and the index links each file relative to its own base directory. Links between principle files stay inside that skill and are fine.
+- **Playbooks** are files inside `yastack`, read only after `/yastack` loads it: `playbooks/<name>.md` relative to its base directory. Playbooks link each other and `../SKILL.md` freely. No other skill refers to a playbook, because outside `/yastack` the agent has no way to locate one. Put the rule a skill needs in the skill itself, or in the playbook that calls the skill.
+
+Subagents spawned with `Agent` can't use slash commands, but they have the `Skill` tool. A brief that delegates a skill names it and tells the subagent to load it with `Skill`. A brief names each principle the subagent needs and tells it to load the `principles` skill with `Skill`. A brief passes an absolute path only for a playbook or a reference file. A subagent that loads a fan-out skill (`arena`, `architect`, `interrogate`) as context is one worker in it. Its brief names that role and tells it not to fan out again.
 
 The entry point is named after the stack. If yastack is ever packaged as a Claude Code plugin named `yastack`, `/yastack` still works: a bare name resolves to the plugin skill, and `/yastack:yastack` is only needed when another skill has the same name (tested on Claude Code 2.1.325).
 
@@ -71,7 +76,7 @@ Adding or changing a skill or playbook:
 1. Prefer editing an existing playbook or skill over adding a new one. A new file needs a second real use case, not a hypothetical one.
 2. Write it tight. Keep only what the model would otherwise get wrong or do inconsistently: exact steps, gotchas, commands, output shapes. Cut general best practice, motivation, and padded examples.
 3. For a skill: create `skills/<name>/SKILL.md` with the frontmatter above. Name it as the `` `<name>` `` skill from the playbook step that uses it, or from a non-negotiable in `skills/yastack/SKILL.md` when it applies across tasks.
-4. For a principle: create `skills/principles/<name>.md`, a `# Title` and the rule, with no frontmatter. Add `` - [Title](<name>.md). <applies when> `` under its group in `skills/principles/SKILL.md`. The entry states when it applies and the rule in one line. Link to it from elsewhere as `principles/<name>.md`.
+4. For a principle: create `skills/principles/<name>.md`, a `# Title` and the rule, with no frontmatter. Add `` - [Title](<name>.md). <applies when> `` under its group in `skills/principles/SKILL.md`. The entry states when it applies and the rule in one line. Elsewhere, name it as the `` `<name>` `` principle, never as a link or path.
 5. For a playbook: create `skills/yastack/playbooks/<name>.md` and add `` - **Title** (`<name>`). <use for> `` under **Playbooks**.
 6. Run `python3 scripts/check.py`. The pre-commit hook runs it again on commit.
 7. Test it. Re-run the prompt from the original evidence in a fresh session, through `/yastack`, and confirm the route and the behavior changed. Say in the commit message whether you did this.
