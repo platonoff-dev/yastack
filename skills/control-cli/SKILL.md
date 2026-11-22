@@ -49,7 +49,7 @@ tmux kill-session -t "$SESSION"
 For Node CLIs:
 
 ```bash
-NODE_OPTIONS="--inspect=127.0.0.1:0" tmux new-session -d -s "$SESSION" -- <node-cli-command>
+tmux new-session -d -s "$SESSION" -- env NODE_OPTIONS="--inspect=127.0.0.1:0" <node-cli-command>
 ```
 
 Read the terminal output to find the inspector URL, then use Chrome DevTools-compatible tooling if profiling is needed.
@@ -77,18 +77,27 @@ os.close(slave_fd)
 
 deadline = time.time() + 30
 buffer = b""
+sent, mark = False, 0
 while time.time() < deadline:
     ready, _, _ = select.select([master_fd], [], [], 0.25)
     if not ready:
         continue
-    chunk = os.read(master_fd, 4096)
+    try:
+        chunk = os.read(master_fd, 4096)
+    except OSError:
+        chunk = b""
+    if not chunk:
+        break
     buffer += chunk
-    if b"<ready text>" in buffer:
+    if not sent and b"<ready text>" in buffer:
         os.write(master_fd, b"help\n")
+        sent, mark = True, len(buffer)
+    elif sent and b"<expected reply>" in buffer[mark:]:
         break
 
 print(buffer.decode(errors="replace"))
 proc.terminate()
+proc.wait(timeout=5)
 os.close(master_fd)
 ```
 
