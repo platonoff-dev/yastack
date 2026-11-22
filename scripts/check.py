@@ -13,6 +13,7 @@ LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
 PRINCIPLE_ITEM = re.compile(r"^- \[[^\]]+\]\(([a-z0-9-]+)\.md\)\.", re.M)
 OTHER_HARNESS = re.compile(r"\bcodex\b|spawn_agent|allow_implicit_invocation", re.I)
+TODOLIST = re.compile(r"\btodo[ -]?lists?\b", re.I)
 
 errors = []
 
@@ -79,6 +80,23 @@ for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*"
         errors.append(f"{rel(path)}: Codex metadata; yastack targets Claude Code only")
     elif OTHER_HARNESS.search(path.read_text(errors="ignore")):
         errors.append(f"{rel(path)}: mentions Codex; yastack targets Claude Code only")
+
+# A bare principle link gets cited, not read. A skill that links one must link the index too.
+PRINCIPLE_LINK = re.compile(r"\]\(\.\./principles/(?!SKILL\.md)[a-z0-9-]+\.md\)")
+for md in sorted(SKILLS.glob("*/SKILL.md")):
+    if md.parent.name in (ENTRY, PRINCIPLES):
+        continue
+    text = md.read_text()
+    if PRINCIPLE_LINK.search(text) and "](../principles/SKILL.md)" not in text:
+        errors.append(
+            f"{rel(md)}: links a principle file but never sends the agent to the principles index"
+        )
+
+# "Open a todolist" names no Claude Code tool. Use the router's checklist and TaskCreate rule.
+for path in sorted(SKILLS.rglob("*.md")):
+    for n, line in enumerate(path.read_text().splitlines(), 1):
+        if TODOLIST.search(line):
+            errors.append(f"{rel(path)}:{n}: says 'todolist'; use the router's checklist rule")
 
 entry_md = SKILLS / ENTRY / "SKILL.md"
 if entry_md.is_file():

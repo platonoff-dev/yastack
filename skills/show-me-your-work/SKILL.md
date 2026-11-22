@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Keep one canonical log.
 
+Before you start, read the [principles](../principles/SKILL.md) index and, in full, every principle file this skill links.
+
 ## The format
 
 A single TSV file, one row per decision. Cells stay single-line. Evidence is a pointer, not prose.
