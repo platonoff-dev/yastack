@@ -90,6 +90,14 @@ for doc in sorted([*SKILLS.rglob("*.md"), *(ROOT / ".claude" / "skills").rglob("
     if doc.is_relative_to(SKILLS) and home.name != ENTRY and "playbooks/" in text:
         errors.append(f"{rel(doc)}: refers to a playbook; only {ENTRY} can locate one")
 
+# A bare link to a playbook gets skimmed, not opened. Its line tells the agent to `Read` it.
+for doc in sorted((SKILLS / ENTRY).rglob("*.md")):
+    for n, line in enumerate(doc.read_text().splitlines(), 1):
+        for target in LINK.findall(line):
+            dest = (doc.parent / target).resolve()
+            if "playbooks" in dest.parts and "`Read`" not in line:
+                errors.append(f"{rel(doc)}:{n}: link to playbook {target} without `Read`")
+
 # yastack is tuned to Claude Code only. Keep other harnesses out of every skill.
 for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*")]):
     if not path.is_file():
