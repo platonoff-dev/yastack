@@ -107,5 +107,6 @@ For an explicit request to run one of these skills, load it with `Skill`.
 - `control-ui`. Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI.
 - `auto-goal`. Keep working until a checkable condition holds, with a headless Claude Code `/goal` session.
 - `transcript`. Find, read, and hand a reviewer the exact transcript of the active run.
+- `reflect`. Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill.
 - `show-me-your-work`. Keep and audit a reviewable decision trail for long-running or unattended work.
 - `figure-it-out`. Design and run an auditable workflow when no narrower playbook fits.
