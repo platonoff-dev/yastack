@@ -84,6 +84,7 @@ The user's own instructions in the task, or `CLAUDE.md` override a playbook step
 - **Refactoring** (`refactoring`). A focused-to-medium structural change that preserves behavior against a pinned contract.
 - **Prototype** (`prototype`). A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it.
 - **Autonomous run** (`autonomous-run`). Drive a long task to completion without stopping.
+- **Session pickup** (`session-pickup`). Resume a prior agent's run from its transcript, cloud session, or pushed branch without redoing finished work.
 - **Opening a PR** (`opening-a-pr`). Open, update, or stack a GitHub pull request or GitLab merge request. Invoked at the end of every other playbook.
 
 ## Standalone skills
