@@ -108,6 +108,7 @@ For an explicit request to run one of these skills, load it with `Skill`.
 - `control-cli`. Build or adapt a local harness to drive, inspect, and profile an interactive CLI or TUI.
 - `control-ui`. Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI.
 - `create-verification-skill`. Generate a project-local verification skill that drives the app the way a user does.
+- `maintain-verification-skill`. Audit a project's verification skill and feature map against source and a live pass, and ship proven corrections.
 - `auto-goal`. Keep working until a checkable condition holds, with a headless Claude Code `/goal` session.
 - `transcript`. Find, read, and hand a reviewer the exact transcript of the active run.
 - `reflect`. Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill.
