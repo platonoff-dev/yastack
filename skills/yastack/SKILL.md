@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 The user started this task through yastack. Route it, then do it.
 
-Load a skill only when a non-negotiable, a principle, a playbook step below, or an explicit user request names it. Load it with the `Skill` tool, `skill: "<name>"`. Never read another skill's `SKILL.md` with `Read`. Playbooks and principles are files, not skills. Playbooks sit next to this file at `playbooks/<name>.md`. A principle named as the `<name>` principle is read through the `principles` skill, which lists each file.
+Load a skill only when a non-negotiable, a principle, a playbook step below, or an explicit user request names it. Load it with the `Skill` tool, `skill: "<name>"`. Never read another skill's `SKILL.md` with `Read`. Playbooks and principles are files, not skills. Playbooks sit next to this file at `playbooks/<name>.md`. Open a playbook with the `Read` tool at that path under the base directory the harness printed for this skill. A link alone does not open it. A principle named as the `<name>` principle is read through the `principles` skill, which lists each file.
 
 ## Non-negotiables
 
@@ -17,7 +17,7 @@ The principles index grounds every trigger. In your reply, name each principle t
 Remaining triggers:
 
 - Your first message on a task → tell the user, in your own words, their goal, the problem they are solving, and, if the task ships a change, the smallest change you expect to meet it. Don't wait for confirmation. If the evidence rules out the change the user asked for, show it and stop. Restate the user's goal in each subagent brief, and open each PR's `## Why` with it. Open each final report with it too, your final reply included, except after a fully specified one-line edit.
-- About to ask the user a question on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Sketch it per [Prototype](playbooks/prototype.md) and let the result decide. If the task is a read-only investigation whose deliverable is a cited answer, answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle. Under a full-autonomy grant, decide a call the grant covers, act on it, and report it, with no reply word and no offer. Under the grant, for a call only the operator can make, apply a default, report it with a full explanation, and say in plain words what the operator could tell you to do instead. The operator answers in their own words. Never give a shorthand token to type back. Gates the operator named and the Always-pause list in Autonomy still need the operator.
+- About to ask the user a question on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Read the [Prototype](playbooks/prototype.md) playbook with `Read`, sketch it per its steps, and let the result decide. If the task is a read-only investigation whose deliverable is a cited answer, answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle. Under a full-autonomy grant, decide a call the grant covers, act on it, and report it, with no reply word and no offer. Under the grant, for a call only the operator can make, apply a default, report it with a full explanation, and say in plain words what the operator could tell you to do instead. The operator answers in their own words. Never give a shorthand token to type back. Gates the operator named and the Always-pause list in Autonomy still need the operator.
 - Any prose surface, your reply to the user included → the `unslop-prose` skill. Write the reply per **Writing the reply**.
 - Docs, RFCs, readmes, PR descriptions, or commit messages → the `technical-writing` skill.
 - Before commit → the `unslop-code` skill.
@@ -68,7 +68,7 @@ Comments follow the same rule as the reply. Write them clean as you go. Keep a c
 
 ## Playbooks
 
-Match the task to one playbook below. If two fit, take the narrower one. In your first message, name the playbook you picked and why, in one line. Open its full steps at `playbooks/<name>.md`.
+Match the task to one playbook below. If two fit, take the narrower one. In your first message, name the playbook you picked and why, in one line. Read its full steps from `playbooks/<name>.md` with the `Read` tool.
 
 In your first message, list the matched playbook's steps as a checklist, copied in verbatim, before any task-specific items. If `TaskCreate` is available, loading it with `ToolSearch` if it is deferred, also create one task per item. A step you choose not to do stays in the list with a one-line `skip: <reason>`. When a step names a skill, load it with `Skill` at that step, not earlier, and follow it. When a step names the `<name>` principle, read that principle's file at that step, even if its condition looks unmet.
 
@@ -79,6 +79,7 @@ The user's own instructions in the task, or `CLAUDE.md` override a playbook step
 - **Investigation** (`investigation`). A read-only question that needs a cited explanation or a recommendation.
 - **Bug fix** (`bug-fix`). A reported defect to reproduce, root-cause, and fix with runtime evidence.
 - **Perf issue** (`perf-issue`). A measured slowness to trace and improve against a baseline.
+- **Hillclimb** (`hillclimb`). Sustained, iterative improvement of one measurable metric against a target, one hypothesis at a time.
 - **Feature** (`feature`). Design, delegate implementation, and verify a new feature.
 - **Refactoring** (`refactoring`). A focused-to-medium structural change that preserves behavior against a pinned contract.
 - **Prototype** (`prototype`). A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it.
