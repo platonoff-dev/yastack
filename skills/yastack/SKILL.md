@@ -88,6 +88,7 @@ The user's own instructions in the task, or `CLAUDE.md` override a playbook step
 - **Autonomous run** (`autonomous-run`). Drive a long task to completion without stopping.
 - **Session pickup** (`session-pickup`). Resume a prior agent's run from its transcript, cloud session, or pushed branch without redoing finished work.
 - **Pause safely** (`pause-safely`). Suspend in-flight work cleanly so it can be resumed later.
+- **Multi-phase plan** (`multi-phase-plan`). Write the plan for a change that lands in several phases or PRs, without implementing it.
 - **Opening a PR** (`opening-a-pr`). Open, update, or stack a GitHub pull request or GitLab merge request. Invoked at the end of every other playbook.
 
 ## Standalone skills
