@@ -16,18 +16,20 @@ Every candidate gets the same prompt, so the prompt is the contract.
 <!-- markdownlint-disable-next-line MD032 -->
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
-3. Use subagents. Run three candidates by default, never fewer than two. Spawn more runners when the arena covers multiple design directions.
-4. Give each candidate its own output location (`isolation: "worktree"` on its `Agent` call when it edits the repo, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the `separate-before-serializing-shared-state` principle.
+3. Use subagents. Run three candidates by default, never fewer than two. Spawn more runners when the arena covers multiple design directions. Make one candidate a peer seat, a model from another vendor run by the `peer` skill. If no peer can run, that seat becomes a subagent like the rest.
+4. Give each candidate its own output location (`isolation: "worktree"` on its `Agent` call when it edits the repo, `--worktree` for the peer seat, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the `separate-before-serializing-shared-state` principle.
 
 ## Phase B: Fan out
 
 Spawn all N subagents with `Agent` in one message, with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
 
+In the same message, start the peer seat. Load the `peer` skill with `Skill` and follow it. Its brief carries the same task, grounding paths, output path, and rationale ask. A peer can't load skills, so paste the rules of the principles you named instead.
+
 If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, spawn one judge subagent and tell it not to edit files. If the judge cannot run, skip the judge, pick the base alone in Phase D, and say so. The judge sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
+After all Phase B candidates complete, run the judge with the `peer` skill in read-only mode, so a model from another vendor scores Claude's candidates. Load it with `Skill`. When no peer can run, spawn one judge subagent and tell it not to edit files. If neither can run, skip the judge, pick the base alone in Phase D, and say so. The judge sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
 
 ## Phase D: Pick a base
 
@@ -47,4 +49,4 @@ Verify the synthesized artifact like any other output, per the `prove-it-works` 
 
 ## Outputs
 
-One synthesized artifact, with a short synthesis note alongside naming the base and why, the cross-judge's verdict or that Phase C skipped the judge, each graft with its source candidate, what was rejected and why, any convergence or dropouts, and the verification result.
+One synthesized artifact, with a short synthesis note alongside naming the base and why, the cross-judge's model and verdict or that Phase C skipped the judge, the peer seat's model or why no peer ran, each graft with its source candidate, what was rejected and why, any convergence or dropouts, and the verification result.

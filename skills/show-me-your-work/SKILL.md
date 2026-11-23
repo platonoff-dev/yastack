@@ -67,14 +67,14 @@ Correct the log, not the story. The audit never edits or removes a row, even an 
 
 ## Cross-model review of the trail
 
-Before handing back, use subagents. Self-review is not a substitute. The subagent reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Use `Agent`. Choose each subagent's model and reasoning level for the job. Always use standard speed, never fast. Run subagents locally, never in a cloud environment.
+Before handing back, get a reviewer from another model family. Self-review is not a substitute. The reviewer reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Load the `peer` skill with `Skill` and run the reviewer in read-only mode. Its brief names the trail and the transcript by absolute path and lists the flags below. When no peer can run, use an `Agent` subagent instead. Choose its model and reasoning level for the job. Always use standard speed, never fast. Run it locally, never in a cloud environment.
 
 - Decisions logged with weak or absent evidence.
 - Verification steps skipped or claimed without proof in the transcript.
 - Choices that look risky in hindsight (premature, scope-creeping, papering over a symptom).
 - Gaps the user would otherwise miss on a casual skim.
 
-Every reply for a run that produced a trail ends with an "Attention" section. Lead with the reviewer's model on its own line (`reviewed by <model>`), then list each flag pointing to specific rows or moments. "No flags" is a valid value. The model name is not.
+Every reply for a run that produced a trail ends with an "Attention" section. Lead with the reviewer's model on its own line (`reviewed by <model>`, from the peer's result line when a peer ran), then list each flag pointing to specific rows or moments. "No flags" is a valid value. The model name is not.
 
 ## Reviewing the trail
 

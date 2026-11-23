@@ -44,7 +44,7 @@ Load the `principles` skill, the index, at the start of every task and follow it
 
 A subagent can't run slash commands and doesn't know this stack, but it has the `Skill` tool. When a step delegates a skill, name the skill in the brief and tell the subagent to load it with `Skill` first. When a step delegates a playbook, put the playbook's absolute path in the brief and tell the subagent to read it first and to load each skill it names with `Skill`. A subagent that loads a fan-out skill, such as `arena`, as context is one worker inside that skill. Its brief names its role, and it does not run the fan-out again. The subagent does not route. It does the step it was given.
 
-You own every subagent's work. Review the diff and write your own summary, don't pass through what it said. A second opinion is the same prompt against a different model. Agreement is high-signal.
+You own every subagent's work. Review the diff and write your own summary, don't pass through what it said. A second opinion is the same prompt against a model from another vendor. Load the `peer` skill with `Skill` to run it. Agreement is high-signal.
 
 **Fresh subagents by default.** Give new work to a fresh subagent with consolidated scope, meaning the original brief, every later directive, and the prior agent's report and branch. This holds for a fix round, a follow-up, a retry, and the next queue item. Resume, message, or queue a follow-up on an existing subagent only when the new work strictly needs state that lives in that agent and is costly to move: its local checkout, its uncommitted changes, or a process it still runs, such as a dev server or a simulator. A stop or hold order to a running agent is not reuse. A role such as a PR owner outlives its agent. Once that agent returns, a fresh agent takes the role's next round. Interrupt-chained resumes silently drop directives, so fire a fresh subagent with consolidated scope rather than trusting a "done" summary.
 
@@ -110,6 +110,7 @@ For an explicit request to run one of these skills, load it with `Skill`.
 - `create-verification-skill`. Generate a project-local verification skill that drives the app the way a user does.
 - `maintain-verification-skill`. Audit a project's verification skill and feature map against source and a live pass, and ship proven corrections.
 - `auto-goal`. Keep working until a checkable condition holds, with a headless Claude Code `/goal` session.
+- `peer`. Run a brief on a model from another vendor and report which model ran.
 - `transcript`. Find, read, and hand a reviewer the exact transcript of the active run.
 - `recall`. Rebuild your recent working context on a topic from past chats, live state, and the shared record, as a current-state brief.
 - `reflect`. Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill.

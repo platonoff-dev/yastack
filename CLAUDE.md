@@ -48,7 +48,7 @@ scripts/
 - Every other skill is reachable: the entry point, a playbook, or a skill one of those names refers to it as `` `<name>` ``.
 - Every relative link in a skill or playbook resolves to a file inside the same skill's directory. Refer to a skill as the `` `<name>` `` skill and to a principle as the `` `<name>` `` principle. No skill outside `yastack` refers to a playbook.
 - Every `` `<name>` `` principle names a file in `skills/principles/`. A skill that names one also names the `principles` skill.
-- No skill mentions Codex or ships `agents/openai.yaml`. yastack targets Claude Code only.
+- No skill mentions Codex or ships `agents/openai.yaml`. yastack targets Claude Code only. The one exception is `peer`, which runs the Codex CLI as a model from another vendor, not as a harness.
 
 When you notice a new rule that keeps being broken, add it to `check.py` rather than to this file.
 

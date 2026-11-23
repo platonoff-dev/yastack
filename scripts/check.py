@@ -9,10 +9,12 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 ENTRY = "yastack"
 PRINCIPLES = "principles"
+PEER = "peer"
 LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 ITEM = re.compile(r"^- \*\*[^*]+\*\* \(`([a-z0-9-]+)`\)\.", re.M)
 PRINCIPLE_ITEM = re.compile(r"^- \[[^\]]+\]\(([a-z0-9-]+)\.md\)\.", re.M)
-OTHER_HARNESS = re.compile(r"\bcodex\b|spawn_agent|allow_implicit_invocation", re.I)
+OTHER_HARNESS = re.compile(r"spawn_agent|allow_implicit_invocation", re.I)
+CODEX = re.compile(r"\bcodex\b", re.I)
 SKILL_NAME = re.compile(r"`([a-z0-9-]+)`")
 UP_PATH = re.compile(r"(?<![\w./])(?:\.\./)+[^\s)`'\"]+")
 PRINCIPLE_REF = re.compile(r"((?:`[a-z0-9-]+`(?:,? and |,? or |, ))*`[a-z0-9-]+`) principles?\b")
@@ -98,13 +100,18 @@ for doc in sorted((SKILLS / ENTRY).rglob("*.md")):
             if "playbooks" in dest.parts and "`Read`" not in line:
                 errors.append(f"{rel(doc)}:{n}: link to playbook {target} without `Read`")
 
-# yastack is tuned to Claude Code only. Keep other harnesses out of every skill.
+# yastack is tuned to Claude Code only. Keep other harnesses out of every skill. `peer` alone names
+# the Codex CLI, because it runs Codex as a model, not as a harness.
 for path in sorted([*SKILLS.rglob("*"), *(ROOT / ".claude" / "skills").rglob("*")]):
     if not path.is_file():
         continue
     if path.name == "openai.yaml":
         errors.append(f"{rel(path)}: Codex metadata; yastack targets Claude Code only")
-    elif OTHER_HARNESS.search(path.read_text(errors="ignore")):
+        continue
+    text = path.read_text(errors="ignore")
+    if OTHER_HARNESS.search(text) or (
+        CODEX.search(text) and not path.is_relative_to(SKILLS / PEER)
+    ):
         errors.append(f"{rel(path)}: mentions Codex; yastack targets Claude Code only")
 
 # Outside the index, a principle is "the `<name>` principle". Its skill loads the principles skill,
