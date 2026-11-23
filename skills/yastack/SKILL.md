@@ -95,6 +95,7 @@ The user's own instructions in the task, or `CLAUDE.md` override a playbook step
 For an explicit request to run one of these skills, load it with `Skill`.
 
 - `how`. Explain how a subsystem works, including its architecture, runtime flow, and ownership.
+- `blast-radius`. Find what a change could break outside its diff, and prove the one fact it's safe because of by running code.
 - `bro`. Restate the last message in plain human language, with no jargon.
 - `in-your-own-words`. Restate the user's goals and the problem they want to solve.
 - `tdd`. Make a focused regression fail before a bug fix and pass after it.
