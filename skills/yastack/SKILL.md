@@ -111,6 +111,7 @@ For an explicit request to run one of these skills, load it with `Skill`.
 - `maintain-verification-skill`. Audit a project's verification skill and feature map against source and a live pass, and ship proven corrections.
 - `auto-goal`. Keep working until a checkable condition holds, with a headless Claude Code `/goal` session.
 - `transcript`. Find, read, and hand a reviewer the exact transcript of the active run.
+- `recall`. Rebuild your recent working context on a topic from past chats, live state, and the shared record, as a current-state brief.
 - `reflect`. Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill.
 - `show-me-your-work`. Keep and audit a reviewable decision trail for long-running or unattended work.
 - `figure-it-out`. Design and run an auditable workflow when no narrower playbook fits.
