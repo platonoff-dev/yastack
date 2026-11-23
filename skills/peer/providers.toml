@@ -1,0 +1,28 @@
+# Models from other vendors that peer.py can run, each through its own CLI and login.
+# Local overrides live in ~/.config/yastack/peers.toml (see SKILL.md). Keep secrets out of here.
+#
+# Per provider:
+#   vendor         credited in `reviewed by`; vendor "anthropic" is always skipped
+#   bin            executable that must be on PATH
+#   detect         optional argv that exits 0 only when the CLI is logged in
+#   base           argv every run starts with; the CLI must write its final message to {out}
+#   read-only      argv added in read-only mode
+#   write          argv added in write mode
+#   model_args     argv added when a model is set; {model}
+#   effort_args    argv added when an effort is set; {effort}
+#   prompt_args    argv that carries the brief; {prompt}
+#   model_pattern  regex with one group that finds the model that ran in the CLI's stderr
+
+order = ["codex"]
+
+[provider.codex]
+vendor = "openai"
+bin = "codex"
+detect = ["codex", "login", "status"]
+base = ["codex", "exec", "--ephemeral", "--skip-git-repo-check", "--color", "never", "-o", "{out}"]
+read-only = ["-s", "read-only"]
+write = ["-s", "workspace-write"]
+model_args = ["-m", "{model}"]
+effort_args = ["-c", "model_reasoning_effort=\"{effort}\""]
+prompt_args = ["{prompt}"]
+model_pattern = '(?m)^model: (\S+)'

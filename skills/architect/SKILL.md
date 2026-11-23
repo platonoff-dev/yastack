@@ -29,7 +29,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job.
 
-Use subagents. Runners may use the same model.
+Use subagents. Arena's peer seat runs one runner on another vendor's model. It gets the runner prompt by absolute path and can't load skills, so paste the rules of the principles it names. The other runners may use the same model.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the `exhaust-the-design-space` principle made concrete. Whole-shape alternatives, not point fixes inside one shape.
 
