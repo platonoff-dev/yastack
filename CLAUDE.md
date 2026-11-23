@@ -4,7 +4,7 @@ Guidance for Claude Code working in this repository.
 
 ## What this repo is
 
-yastack is a personal stack of agent skills for Claude Code, and only Claude Code. pstack is tuned to Cursor and names Cursor tools. yastack is tuned to Claude Code the same way: skills name Claude Code tools, parameters, and features directly, such as `Agent`, `AskUserQuestion`, `isolation: "worktree"`, and `disable-model-invocation`. Do not add a portability layer or instructions for another harness. It borrows three ideas from poteto's pstack and nothing else by default:
+yastack is a personal stack of agent skills for Claude Code, and only Claude Code. It ships as a Claude Code plugin named `yastack`, and the repo is its own single-plugin marketplace. pstack is tuned to Cursor and names Cursor tools. yastack is tuned to Claude Code the same way: skills name Claude Code tools, parameters, and features directly, such as `Agent`, `AskUserQuestion`, `isolation: "worktree"`, and `disable-model-invocation`. Do not add a portability layer or instructions for another harness. It borrows three ideas from poteto's pstack and nothing else by default:
 
 1. **One entry point.** The user types `/yastack <task>` and the stack decides which playbook and skills apply. The user never has to remember which skill fits which task.
 2. **Explicit routing.** A route names the skill a step needs, and the agent loads it with the `Skill` tool at that step. Only the entry point sets `disable-model-invocation: true`, so `/yastack` stays a user command. Every other skill stays model-invocable, because the `Skill` tool refuses a skill with that flag and tells the agent not to replicate it by other means.
@@ -17,6 +17,9 @@ The remote is public (`github.com/platonoff-dev/yastack`). Nothing work-specific
 ## Layout
 
 ```text
+.claude-plugin/
+  plugin.json             plugin manifest; no `version`, so every commit is a version
+  marketplace.json        single-plugin marketplace, `source: "./"`
 skills/
   yastack/                entry point (the router)
     SKILL.md              modeled on pstack's poteto-mode: non-negotiables, principles, autonomy,
@@ -30,8 +33,7 @@ skills/
     <name>.md             a principle: a short rule that applies when its condition holds; no frontmatter
 scripts/
   check.py                validates the invariants below; run before every commit
-  install.sh              symlinks skills into ~/.claude/skills
-.claude/skills/           internal skills for maintaining this repo; not installed
+.claude/skills/           internal skills for maintaining this repo; the plugin does not load them
 ```
 
 **Playbook or skill?** A playbook answers "what kind of task is this and what are the steps". A skill is a reusable capability that more than one playbook (or the user, directly) calls. Start new work as a playbook step. Extract a skill only when a second caller needs it. A principle is not a procedure. It is a rule with a condition ("when you measure, name the limiter") that any playbook or task can hit.
@@ -65,7 +67,7 @@ Three things name a skill, and the agent loads it only then: a non-negotiable in
 
 Subagents spawned with `Agent` can't use slash commands, but they have the `Skill` tool. A brief that delegates a skill names it and tells the subagent to load it with `Skill`. A brief names each principle the subagent needs and tells it to load the `principles` skill with `Skill`. A brief passes an absolute path only for a playbook or a reference file. A subagent that loads a fan-out skill (`arena`, `architect`, `interrogate`) as context is one worker in it. Its brief names that role and tells it not to fan out again.
 
-The entry point is named after the stack. If yastack is ever packaged as a Claude Code plugin named `yastack`, `/yastack` still works: a bare name resolves to the plugin skill, and `/yastack:yastack` is only needed when another skill has the same name (tested on Claude Code 2.1.325).
+The entry point is named after the stack. As a plugin, every skill is `yastack:<name>`. Bare names still resolve while no other skill has the name: `/yastack` runs `yastack:yastack`, and `Skill` with `tdd` loads `yastack:tdd` (tested on Claude Code 2.1.330). So routing text names skills bare. Write `yastack:<name>` only if a clash appears.
 
 ## Changing the stack
 
@@ -79,7 +81,7 @@ Adding or changing a skill or playbook:
 4. For a principle: create `skills/principles/<name>.md`, a `# Title` and the rule, with no frontmatter. Add `` - [Title](<name>.md). <applies when> `` under its group in `skills/principles/SKILL.md`. The entry states when it applies and the rule in one line. Elsewhere, name it as the `` `<name>` `` principle, never as a link or path.
 5. For a playbook: create `skills/yastack/playbooks/<name>.md` and add `` - **Title** (`<name>`). <use for> `` under **Playbooks**.
 6. Run `python3 scripts/check.py`. The pre-commit hook runs it again on commit.
-7. Test it. Re-run the prompt from the original evidence in a fresh session, through `/yastack`, and confirm the route and the behavior changed. Say in the commit message whether you did this.
+7. Test it. Re-run the prompt from the original evidence in a fresh session started with `claude --plugin-dir <this checkout>`, through `/yastack`, and confirm the route and the behavior changed. Say in the commit message whether you did this.
 
 Removing is a feature. Suggest deleting a skill or playbook that hasn't been routed to in a while, or that a newer one supersedes.
 
@@ -101,6 +103,7 @@ There is no CI. The pre-commit hook (`.pre-commit-config.yaml`) is the only thin
 - `shellcheck` for shell scripts
 - `markdownlint-cli2` for Markdown (`.markdownlint-cli2.jsonc`)
 - `scripts/check.py` for the stack invariants
+- `claude plugin validate .` for the plugin and marketplace manifests
 
 Rules:
 
@@ -114,4 +117,6 @@ Rules:
 - `pre-commit run --all-files`: run every hook on the whole repo. Run it after changing a hook or a lint config.
 - `pre-commit autoupdate`: bump the pinned hook revisions.
 - `python3 scripts/check.py`: validate invariants only. Exits non-zero with one line per violation.
-- `scripts/install.sh`: link every skill into `~/.claude/skills/`. Run from the main checkout, never from a worktree. Idempotent. `scripts/install.sh --uninstall` removes the links.
+- `claude plugin marketplace add "$PWD"` then `claude plugin install yastack@yastack`: install the plugin from the main checkout. It loads in place, so edits apply on `/reload-plugins`. Never add a worktree as the marketplace: the install breaks when the worktree is removed.
+- `claude --plugin-dir .`: load this checkout's plugin for one session, such as a worktree under test. It shadows the installed `yastack`.
+- `claude plugin validate .`: check the manifests. It passes with warnings for the missing `version` (deliberate) and the root `CLAUDE.md` (dev context, not plugin context). Don't add `--strict`.
