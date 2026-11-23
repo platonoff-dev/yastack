@@ -1,0 +1,12 @@
+{
+  "name": "yastack",
+  "description": "yastack, a personal stack of Claude Code skills, as a single plugin.",
+  "owner": { "name": "Anatolii Platonov" },
+  "plugins": [
+    {
+      "name": "yastack",
+      "source": "./",
+      "description": "A personal stack of Claude Code skills. Type /yastack <task> and it routes the task to a playbook and the skills that playbook names."
+    }
+  ]
+}

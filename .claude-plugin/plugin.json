@@ -1,0 +1,8 @@
+{
+  "name": "yastack",
+  "description": "A personal stack of Claude Code skills. Type /yastack <task> and it routes the task to a playbook and the skills that playbook names.",
+  "author": { "name": "Anatolii Platonov" },
+  "homepage": "https://github.com/platonoff-dev/yastack",
+  "repository": "https://github.com/platonoff-dev/yastack",
+  "keywords": ["skills", "workflow", "playbooks"]
+}
