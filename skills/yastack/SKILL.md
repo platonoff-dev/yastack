@@ -22,6 +22,7 @@ Remaining triggers:
 - Docs, RFCs, readmes, PR descriptions, or commit messages → the `technical-writing` skill.
 - Before commit → the `unslop-code` skill.
 - Before review → the `unslop-comments` skill.
+- Before any push of a branch → read the [Opening a PR](playbooks/opening-a-pr.md) playbook with `Read` and run its **Review before push** loop.
 - Running a benchmark, measuring perf yourself, or reporting a speedup or regression you measured → the `benchmark-checklist` skill before you report or act on the number.
 - Bugbot or the agentic security review commented → skeptical posture. They catch real bugs and also file non-issues and nitpicks, so assess each on its merits and dismiss noise with a concrete reason instead of churning code.
 - Broken skill mid-task → fix it in its own PR. Don't block. Don't silently work around it.

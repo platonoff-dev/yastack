@@ -5,12 +5,15 @@
 #   vendor         credited in `reviewed by`; vendor "anthropic" is always skipped
 #   bin            executable that must be on PATH
 #   detect         optional argv that exits 0 only when the CLI is logged in
-#   base           argv every run starts with; the CLI must write its final message to {out}
+#   base           argv every `run` starts with; the CLI must write its final message to {out}
 #   read-only      argv added in read-only mode
 #   write          argv added in write mode
 #   model_args     argv added when a model is set; {model}
 #   effort_args    argv added when an effort is set; {effort}
 #   prompt_args    argv that carries the brief; {prompt}
+#   review         optional argv for the CLI's own read-only review of the commits on top of {base_ref};
+#                  it must write its final message to {out}; model and effort args follow it;
+#                  a local override of `base` does not reach it, so override `review` too
 #   model_pattern  regex with one group that finds the model that ran in the CLI's stderr
 
 order = ["codex"]
@@ -25,4 +28,5 @@ write = ["-s", "workspace-write"]
 model_args = ["-m", "{model}"]
 effort_args = ["-c", "model_reasoning_effort=\"{effort}\""]
 prompt_args = ["{prompt}"]
+review = ["codex", "exec", "--ephemeral", "--color", "never", "-s", "read-only", "-o", "{out}", "review", "--base", "{base_ref}"]
 model_pattern = '(?m)^model: (\S+)'
