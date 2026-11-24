@@ -85,12 +85,13 @@ def check(provider):
 
 
 def argv(provider, mode, values):
-    parts = provider["base"] + provider[mode]
+    parts = list(provider["review"]) if mode == "review" else provider["base"] + provider[mode]
     if provider.get("model"):
         parts += provider["model_args"]
     if provider.get("effort") and "effort_args" in provider:
         parts += provider["effort_args"]
-    parts += provider["prompt_args"]
+    if mode != "review":
+        parts += provider["prompt_args"]
     return [PLACEHOLDER.sub(lambda m: values[m[1]], part) for part in parts]
 
 
@@ -102,9 +103,10 @@ def failure(run):
     return "no output"
 
 
-def attempt(provider, mode, cwd, prompt, out, timeout):
+def attempt(provider, mode, cwd, prompt, out, timeout, base_ref):
     values = {
         "prompt": prompt,
+        "base_ref": base_ref,
         "out": str(out),
         "model": provider.get("model", ""),
         "effort": provider.get("effort", ""),
@@ -156,7 +158,12 @@ def cmd_run(args):
         log(f"worktree {cwd}")
     if args.mode == "write" and not is_linked_worktree(cwd):
         sys.exit(f"peer: write mode needs its own worktree; {cwd} is not one. Pass --worktree.")
-    prompt = Path(args.prompt_file).read_text()
+    if args.base:
+        try:
+            git(cwd, "merge-base", "HEAD", args.base, text=True)
+        except subprocess.CalledProcessError as e:
+            sys.exit(f"peer: --base {args.base!r} has no merge base with HEAD: {e.stderr.strip()}")
+    prompt = Path(args.prompt_file).read_text() if args.prompt_file else ""
     out = Path(args.out).resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
     deadline = time.monotonic() + args.timeout
@@ -170,8 +177,10 @@ def cmd_run(args):
         before = git_state(cwd) if args.mode == "write" else None
         out.unlink(missing_ok=True)
         try:
+            if args.mode == "review" and "review" not in provider:
+                raise Unavailable("no review command")
             check(provider)
-            model = attempt(provider, args.mode, cwd, prompt, out, remaining)
+            model = attempt(provider, args.mode, cwd, prompt, out, remaining, args.base)
         except Unavailable as why:
             log(f"skip {name}: {why}")
             if before is not None and git_state(cwd) != before:
@@ -193,12 +202,17 @@ def main():
     run = sub.add_parser("run", help="run one brief on the first peer that can")
     run.add_argument("--mode", choices=["read-only", "write"], required=True)
     run.add_argument("--prompt-file", required=True)
-    run.add_argument("--out", required=True, help="file that receives the peer's final message")
-    run.add_argument("--cwd", default=".", help="directory the peer works in")
     run.add_argument("--worktree", help="create this worktree from --cwd's repo and work there")
-    run.add_argument("--provider", help="run only this provider")
-    run.add_argument("--timeout", type=int, default=1500, help="seconds across all attempts")
-    run.set_defaults(func=cmd_run)
+    run.set_defaults(base="")
+    review = sub.add_parser("review", help="run the peer CLI's own read-only code review")
+    review.add_argument("--base", required=True, help="branch the reviewed commits merge into")
+    review.set_defaults(mode="review", prompt_file=None, worktree=None)
+    for cmd in (run, review):
+        cmd.add_argument("--out", required=True, help="file that receives the peer's final message")
+        cmd.add_argument("--cwd", default=".", help="directory the peer works in")
+        cmd.add_argument("--provider", help="run only this provider")
+        cmd.add_argument("--timeout", type=int, default=1500, help="seconds across all attempts")
+        cmd.set_defaults(func=cmd_run)
     args = parser.parse_args()
     sys.exit(args.func(args))
 

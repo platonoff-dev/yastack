@@ -48,11 +48,22 @@ Run the command with `Bash` and `run_in_background: true`. A run takes minutes, 
 
 `--provider <name>` runs only that provider, for a user who asked for one by name.
 
+## Review a branch
+
+To get the peer CLI's own code review of the commits on top of a base branch, run:
+
+```bash
+python3 <base>/scripts/peer.py review --base <base-ref> --cwd <repo> --out <file>
+```
+
+It takes no brief. The CLI refuses custom instructions together with a base, so the review runs its built-in prompt, read-only, with no task statement. It reads the working tree. Commit the work under review first. Leave the tree unchanged until the review returns. Run it in the background like `run`. A provider without a `review` entry in `providers.toml` is skipped.
+
 ## Read the result
 
 On success the last stdout line is `peer provider=<name> vendor=<vendor> model=<id> cwd=<dir> out=<file>`. Stderr has one `peer: skip <name>: <why>` line per provider that didn't run.
 
 - **Exit 0.** Read `--out`. Credit the work as `<model> (<vendor>)` wherever the caller reports who ran it, such as `reviewed by`.
+- **Exit 1 with `peer: --base`.** The base is missing, not fetched, or shares no history with `HEAD`. Fetch or correct the base. Run the review again.
 - **Exit 3.** No peer could run. Do the step with a native `Agent` subagent instead. In the reply, say that no peer ran and quote the skip lines.
 - **Exit 4.** A write run failed after editing its worktree. The script stops there rather than run another peer on half-done edits. Treat the seat as a dropout and keep the worktree for inspection.
 
@@ -68,4 +79,4 @@ model = "<model id>"
 effort = "xhigh"
 ```
 
-Leave a model unset to use the CLI's own default. To add a provider, add an entry to `providers.toml` with the fields its header lists. Then run it once in each mode with `--provider <name>` before you commit it.
+Leave a model unset to use the CLI's own default. To add a provider, add an entry to `providers.toml` with the fields its header lists. Then run it once in each mode, and `review` if it has one, with `--provider <name>` before you commit it.

@@ -10,6 +10,27 @@ Use this playbook to open, update, or stack a change request: a GitHub pull requ
 
 **PRs.** Load and run the `unslop-code` skill over the diff before commit and the `unslop-comments` skill before review. Write every PR title, description, and commit body with the `technical-writing` skill (every layer except Diátaxis, and apply the STE vocabulary rules: one word per action, keep articles, a plain verb over `-ing` where one works), then load and apply the `unslop-prose` skill.
 
+**Review before push.** Run this loop before every push of a branch, including the push that opens or updates a PR or goes straight to a remote branch. Commit the work first. Keep unrelated edits out of the commit. In this loop, `<branch>` is the branch you push, and the checkout is the worktree where it is checked out. `<base>` is the fetched remote ref the push is compared against. For a PR branch, it is the PR base on the remote the PR targets, such as `origin/main` or the parent branch in a stack. For a direct push to an existing remote branch, it is that remote branch. For a new branch without a PR, it is the remote branch it was cut from. Run `git fetch <remote>` for the remote that holds `<base>`. Name `<branch>` in every range, not `HEAD`, because the `code-review` skill runs in the session's working directory, which may not be the checkout. Give every `Agent` seat the checkout's absolute path. Tell it to run every read and command there. Tell it to ignore changes outside `<base>...<branch>`. Do not edit the checkout until every seat in the round returns, because the peer review reads its working tree.
+
+1. Load the `peer` skill with `Skill`. Then start three fresh reviewers in one message. None of them edits files.
+   - Correctness seat. A general-purpose `Agent` subagent. Tell it to load the `code-review` skill with `Skill` and run it with the args `high <base>...<branch>`, without `--fix` or `--comment`.
+   - Peer seat. Run the `peer` skill's branch review in the background. Pass `<base>` as `--base` and the checkout as `--cwd`. Write `--out` outside the checkout. If no peer can run, start a second correctness seat instead and say in the reply that no peer ran.
+   - Scope seat. A general-purpose `Agent` subagent. Its brief holds the task as the user gave it, every later directive verbatim, the planned scope of this PR when the task spans a stack, the command `git diff <base>...<branch>`, and the scope checklist below. Tell it to load the `principles` skill with `Skill` and read the `test-behavior-not-implementation` principle.
+2. Tell each `Agent` seat to return one line per finding as `file:line`, the claim, and the evidence or the failure scenario, or the single line `no findings`. Each seat also states the range it reviewed and its commit count. A seat that could not review that range does not count. Run it again once. If it fails again, do not push. Tell the user which seat failed and why.
+3. Triage every finding yourself. Verify it against the code or a run before you act on it. Fix each real finding. Rerun the checks it touches. Commit the fix. Dismiss the rest with a concrete reason.
+4. Run the next round with fresh seats. Give the correctness and scope seats each dismissed finding with its reason, and tell them to raise it again only with new evidence. The peer review takes no instructions, so a finding it repeats without new evidence stays dismissed.
+5. Stop when every seat in one round returns no finding you accept. Then push. After five rounds without that, do not push. Show the user the open findings with your reasons and ask.
+
+Scope checklist:
+
+- Every change traces to the task. An unrequested change passes only when the task clearly missed a detail that the change needs. Name that detail.
+- Every part of the task, or of this PR's planned scope in a stack, is done.
+- No scope creep, such as unrequested refactors, renames, reformatting, drive-by cleanups, new dependencies, new flags or config, or an abstraction with one caller.
+- Tests check behavior, not implementation. Flag tests that restate the code, mock the unit under test, repeat cases, or outweigh the change.
+- Comments explain only a non-obvious why. Flag comments that narrate the code, log the change ("now uses X"), or refer to the task or the review.
+- Flag defensive code for impossible states, swallowed errors, weakened or skipped tests, and silenced lint or type checks.
+- Flag debug output, dead code, new TODOs, and stray files.
+
 **Titles.** Conventional Commits `type(scope): subject`, no trailing period. Type such as `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, or `perf`. Scope is the area, such as `yastack`. Subject is short, imperative, and names a real symbol when one carries the change, for example `fix(yastack): retarget opening-a-pr babysit trigger`.
 
 **Descriptions.** The PR body is a one-minute briefing, not a lab notebook, for a reviewer who has the diff. It says why the change exists, what it leaves out, what it could break, and how you proved it works. Write short, simple sentences with few identifiers, no walls of text. The body becomes the squash commit body, so keep that commit under about 40 lines. Use `##` headings, not bold lead-ins, in this order, and drop a section with nothing to say:
@@ -33,7 +54,7 @@ After the sections, attach videos or screenshots when they prove a claim. Full S
 
 **Babysit.** Opening a PR does not start a babysit. Post the URL and keep building. Finish the phase or stack first. Run a separate babysit pass only when the user asks for one after the whole stack exists. A babysit for each new PR stalls the build and spends checks on commits later waves restart. Push back when feedback drifts from intent.
 
-A subagent that opens a PR loads and runs the `unslop-code` and `unslop-comments` skills, and posts the URL. It returns to the parent without babysitting.
+A subagent that opens a PR loads and runs the `unslop-code` and `unslop-comments` skills. It returns to the parent without babysitting. With the `Agent` tool, it runs the review loop, pushes, opens the PR, and posts the URL. Its brief carries the user's task and every later directive verbatim, for the scope seat. Without it, the subagent commits, does not push, and returns its worktree, branch, and base. The parent then runs the loop, pushes, opens the PR, and posts the URL.
 
 ## Forge commands
 
