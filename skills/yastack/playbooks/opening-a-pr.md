@@ -19,7 +19,7 @@ Use this playbook to open, update, or stack a change request: a GitHub pull requ
 2. Tell each `Agent` seat to return one line per finding as `file:line`, the claim, and the evidence or the failure scenario, or the single line `no findings`. Each seat also states the range it reviewed and its commit count. A seat that could not review that range does not count. Run it again once. If it fails again, do not push. Tell the user which seat failed and why.
 3. Triage every finding yourself. Verify it against the code or a run before you act on it. Fix each real finding. Rerun the checks it touches. Commit the fix. Dismiss the rest with a concrete reason.
 4. Run the next round with fresh seats. Give the correctness and scope seats each dismissed finding with its reason, and tell them to raise it again only with new evidence. The peer review takes no instructions, so a finding it repeats without new evidence stays dismissed.
-5. Stop when every seat in one round returns no finding you accept. Then push. After five rounds without that, do not push. Show the user the open findings with your reasons and ask.
+5. Stop when every seat in one round returns no finding you accept. Then push. After three rounds without that, do not push. Show the user the open findings with your reasons and ask.
 
 Scope checklist:
 
