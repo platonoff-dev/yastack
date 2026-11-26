@@ -5,7 +5,7 @@ description: Find the exact transcript of the active Claude Code run, read it as
 
 # Transcript
 
-Use this when a step reads the active run's transcript: auditing a decision log, a cross-model review, reflecting on the session, or picking up a prior run. It replaces Cursor's `agent-transcripts/` directory.
+Use this when a step reads the active run's transcript: auditing a decision log, a cross-model review, reflecting on the session, or picking up a prior run.
 
 `<script>` is `scripts/transcript.py` next to this file. Pass its absolute path.
 
@@ -13,7 +13,7 @@ Use this when a step reads the active run's transcript: auditing a decision log,
 
 Run `python3 <script> path`.
 
-The script matches this run's own id: `$CLAUDE_CODE_SESSION_ID` maps to `~/.claude/projects/*/<id>.jsonl` (or under `$CLAUDE_CONFIG_DIR`). It exits 1 unless exactly one file matches. Never fall back to the newest file. Never read another session's transcript unless the user asks.
+The script matches this run's own id: `$CLAUDE_CODE_SESSION_ID` maps to `~/.claude/projects/*/<id>.jsonl` (or under `$CLAUDE_CONFIG_DIR`). It exits 1 unless exactly one file matches. Never fall back to the newest file, because another session in the same project may have written it last. Never read another session's transcript unless the user asks.
 
 The file is live. It holds everything up to the last finished tool call. The current call's output lands after the call returns.
 

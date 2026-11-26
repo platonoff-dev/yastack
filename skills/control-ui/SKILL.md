@@ -78,7 +78,7 @@ Replace `<app-root-selector>` with a stable marker from the current repo, such a
 3. Perform exactly one structural action: click, type, keypress, drag, scroll, navigate, or resize.
 4. Capture a fresh snapshot/screenshot.
 5. Verify the expected state change.
-6. Save artifacts for before/after comparisons when the user asked for proof.
+6. Save before/after artifacts whenever you report the result as evidence.
 
 ## CDP Capabilities
 

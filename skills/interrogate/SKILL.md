@@ -13,7 +13,12 @@ The scope is what the user names. Otherwise it is the branch diff from its merge
 
 ## Fan out
 
-Load the `arena` skill with `Skill`. Run its Phase A steps 3 and 4 and Phase B, with four changes. Use `Agent` subagents with an available Opus model. Let the agent choose among the models Claude Code supports. Adversaries may use the same model, except arena's peer seat, which runs one adversary on another vendor's model. Copy the scope's uncommitted changes into each worktree. The peer's `--worktree` does that itself. Spawn each adversary as a general-purpose subagent. Tell each adversary to load the `interrogate` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job. Say in the brief that it is one adversary, so it does not fan out adversaries itself. The peer seat can't load skills, so its brief carries the brief below and the rules of the principles you named as text. In place of the arena task and rationale, give each adversary the scope, the intent, and this brief:
+Load the `arena` skill with `Skill`. Run its Phase A steps 3 and 4 and Phase B, with four changes:
+
+1. Use `Agent` subagents on an Opus model. When Claude Code offers more than one, choose among them. Adversaries may use the same model, except arena's peer seat, which runs one adversary on another vendor's model.
+2. Copy the scope's uncommitted changes into each worktree. The peer's `--worktree` does that itself.
+3. Spawn each adversary as a general-purpose subagent. Tell each adversary to load the `interrogate` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job. Say in the brief that it is one adversary, so it does not fan out adversaries itself. The peer seat can't load skills, so its brief carries the brief below and the rules of the principles you named as text.
+4. In place of the arena task and rationale, give each adversary the scope, the intent, and this brief:
 
 > Break this change. Prove each finding with a run against the real code, such as a failing test, a repro script, or command output that shows the wrong behavior. For a design or plan, run a prototype or probe the current tree. Keep repros in your own worktree. Report each finding with a title, the exact command, the output it printed, and the output the intent requires. Leave out anything you did not run. That covers style, naming, structure, and risks that need a future change to matter. No findings is a valid result.
 

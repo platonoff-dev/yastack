@@ -27,7 +27,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 ## Phase B: Sketch
 
-Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job.
+Load the `arena` skill with `Skill` and run it with the design-sketch task and the Phase A grounding artifacts. Pass [`references/runner-prompt.md`](references/runner-prompt.md) as each runner's prompt. Tell each runner to load the `architect` and `principles` skills with `Skill` first, in place of the `arena` skill that arena's Phase B names, then read each principle the brief names. Name the principles that apply to its job.
 
 Use subagents. Arena's peer seat runs one runner on another vendor's model. It gets the runner prompt by absolute path and can't load skills, so paste the rules of the principles it names. The other runners may use the same model.
 
@@ -51,7 +51,7 @@ If the human pushes back on the shape (in a checkpoint or after the fact), treat
 
 ## Phase D: Implement against the sketch
 
-Replace `not implemented` bodies with code, pseudocode with logic. The synthesized sketch is the contract. Deviations from it are signal to surface, not friction to absorb silently. If a function needs a parameter the sketch didn't anticipate, ask whether the sketch was wrong, the requirement was missed, or the implementation is overreaching.
+Replace `not implemented` bodies with code, pseudocode with logic. The synthesized sketch is the contract. Deviations from it are signal to surface, not friction to absorb silently. If a function needs a parameter the sketch didn't anticipate, decide whether the sketch was wrong, the requirement was missed, or the implementation is overreaching.
 
 ## Phase E: Scrap when the architecture is wrong
 

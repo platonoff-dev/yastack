@@ -18,7 +18,7 @@ Other skills and playbooks name a principle as the `<name>` principle. Its file 
 ## Core
 
 - [Laziness Protocol](laziness-protocol.md). Refactoring, sizing a diff, or tempted to add abstractions, layers, or signal threading. Bias to deletion and the smallest change that solves the problem.
-- [Foundational Thinking](foundational-thinking.md). Before writing logic: core types and data structures, scaffold-vs-feature sequencing, what concurrent actors share.
+- [Foundational Thinking](foundational-thinking.md). Before writing logic. Settle the core types and data structures first, build scaffold before features, and isolate state that concurrent actors share.
 - [Redesign from First Principles](redesign-from-first-principles.md). Integrating a new requirement into an existing design. Redesign as if it had been foundational from day one.
 - [Attack the Premise](attack-the-premise.md). Two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.
 - [Subtract Before You Add](subtract-before-you-add.md). Sequencing an addition, refactor, or rewrite. Remove dead weight first, then build on the simpler base.

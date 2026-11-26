@@ -1,5 +1,7 @@
 # Migrate Callers Then Delete Legacy APIs
 
+When you introduce a new internal API while old callers still exist, migrate every caller and delete the old API in the same wave instead of keeping a compatibility layer.
+
 - Update tests to assert the new contract, and delete tests that only protect pre-refactor implementation details
 
 **When this applies:**

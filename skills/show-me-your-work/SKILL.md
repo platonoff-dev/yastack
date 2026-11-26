@@ -30,7 +30,7 @@ ts	phase	decision	why	evidence	result
 2026-05-24T09:02:00Z	frame	counted the work first, about 100 components and roughly 75 hours	wanted to know the size before starting a long run	commit 3a9f1c2	found 5 things to sort out before starting
 2026-05-24T09:40:00Z	harness	took screenshots of the old version before changing anything	so we can compare old against new and catch any visual change	scripts/snapshot.sh, baseline/	saved 120 reference screenshots
 2026-05-24T11:15:00Z	widget	moved the widget styles over without changing how it looks	keep the change small and the result identical	commit 7c21e0a, pixel-diff 0	looks identical, tests pass
-2026-05-24T12:30:00Z	widget	threw out a helper's work because its screenshots were blank	checked the real files instead of trusting its summary	worktree reset	reverted, tightened the instructions for next time
+2026-05-24T12:30:00Z	widget	threw out a helper's work because its screenshots were blank	checked the real files instead of trusting its summary	widget/after/01.png	reverted, tightened the instructions for next time
 ```
 <!-- markdownlint-enable MD010 MD040 -->
 
@@ -67,14 +67,14 @@ Correct the log, not the story. The audit never edits or removes a row, even an 
 
 ## Cross-model review of the trail
 
-Before handing back, get a reviewer from another model family. Self-review is not a substitute. The reviewer reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Load the `peer` skill with `Skill` and run the reviewer in read-only mode. Its brief names the trail and the transcript by absolute path and lists the flags below. When no peer can run, use an `Agent` subagent instead. Choose its model and reasoning level for the job. Always use standard speed, never fast. Run it locally, never in a cloud environment.
+Before handing back, get a reviewer from another model family. Self-review is not a substitute. The reviewer reads the audit trail and the run's transcript, then flags what the user should pay attention to. Not a redo of the work, a scan for what's suboptimal or risky. Load the `peer` skill with `Skill` and run the reviewer in read-only mode. Its brief names the trail and the transcript by absolute path, lists the flags below, and asks for each flag with the log row or transcript line it points to. When no peer can run, use an `Agent` subagent instead. Choose its model and reasoning level for the job. Always use standard speed, never fast. Run it locally, never in a cloud environment.
 
 - Decisions logged with weak or absent evidence.
 - Verification steps skipped or claimed without proof in the transcript.
 - Choices that look risky in hindsight (premature, scope-creeping, papering over a symptom).
 - Gaps the user would otherwise miss on a casual skim.
 
-Every reply for a run that produced a trail ends with an "Attention" section. Lead with the reviewer's model on its own line (`reviewed by <model>`, from the peer's result line when a peer ran), then list each flag pointing to specific rows or moments. "No flags" is a valid value. The model name is not.
+Every reply for a run that produced a trail ends with an "Attention" section. Lead with the reviewer's model on its own line (`reviewed by <model>`, from the peer's result line when a peer ran), then list each flag pointing to specific rows or moments. "No flags" is a valid list. The model line is required.
 
 ## Reviewing the trail
 

@@ -1,16 +1,23 @@
 # Opening a PR
 
-Invoked at the end of every other playbook.
+Invoked at the end of each playbook that ships a change.
 
 Use this playbook to open, update, or stack a change request: a GitHub pull request or a GitLab merge request. "PR" below means either. "Base" means the branch the PR merges into, which GitLab calls the target branch.
 
-**Worktree.** Work from a git worktree off main. Pass its path to subagents. Multiple subagent calls on the same branch each get their own worktree, or `git fetch && git reset --hard origin/<branch>` between them. Dirty branch with unrelated work: patch out, fresh worktree, apply. Snarled worktree: reset from main, redo minimally.
+**Worktree.** Work from a git worktree off main. Pass its path to subagents. Multiple subagent calls on the same branch each get their own worktree, or `git fetch && git reset --hard origin/<branch>` between them. If the branch has uncommitted work unrelated to yours, save your own change as a patch, create a fresh worktree off main, and apply the patch there. Leave the unrelated work where it is. Snarled worktree: reset from main, redo minimally.
 
 **Commits.** Commit liberally. Rebase into small, ordered commits before opening PRs. Each commit is a future PR: landable, ordered to tell the story. Amend when the fix belongs in a just-made commit. New commit when separable. Commit bodies don't restate the subject.
 
 **PRs.** Load and run the `unslop-code` skill over the diff before commit and the `unslop-comments` skill before review. Write every PR title, description, and commit body with the `technical-writing` skill (every layer except Diátaxis, and apply the STE vocabulary rules: one word per action, keep articles, a plain verb over `-ing` where one works), then load and apply the `unslop-prose` skill.
 
-**Review before push.** Run this loop before every push of a branch, including the push that opens or updates a PR or goes straight to a remote branch. Commit the work first. Keep unrelated edits out of the commit. In this loop, `<branch>` is the branch you push, and the checkout is the worktree where it is checked out. `<base>` is the fetched remote ref the push is compared against. For a PR branch, it is the PR base on the remote the PR targets, such as `origin/main` or the parent branch in a stack. For a direct push to an existing remote branch, it is that remote branch. For a new branch without a PR, it is the remote branch it was cut from. Run `git fetch <remote>` for the remote that holds `<base>`. Name `<branch>` in every range, not `HEAD`, because the `code-review` skill runs in the session's working directory, which may not be the checkout. Give every `Agent` seat the checkout's absolute path. Tell it to run every read and command there. Tell it to ignore changes outside `<base>...<branch>`. Do not edit the checkout until every seat in the round returns, because the peer review reads its working tree.
+**Review before push.** Run this loop before every push of a branch, including the push that opens or updates a PR or goes straight to a remote branch.
+
+- Commit the work first. Keep unrelated edits out of the commit.
+- In this loop, `<branch>` is the branch you push, and the checkout is the worktree where it is checked out.
+- `<base>` is the fetched remote ref the push is compared against. For a PR branch, it is the PR base on the remote the PR targets, such as `origin/main` or the parent branch in a stack. For a direct push to an existing remote branch, it is that remote branch. For a new branch without a PR, it is the remote branch it was cut from. Run `git fetch <remote>` for the remote that holds `<base>`.
+- Name `<branch>` in every range, not `HEAD`, because the `code-review` skill runs in the session's working directory, which may not be the checkout.
+- Give every `Agent` seat the checkout's absolute path. Tell it to run every read and command there. Tell it to ignore changes outside `<base>...<branch>`.
+- Do not edit the checkout until every seat in the round returns, because the peer review reads its working tree.
 
 1. Load the `peer` skill with `Skill`. Then start three fresh reviewers in one message. None of them edits files.
    - Correctness seat. A general-purpose `Agent` subagent. Tell it to load the `code-review` skill with `Skill` and run it with the args `high <base>...<branch>`, without `--fix` or `--comment`.
@@ -52,7 +59,7 @@ After the sections, attach videos or screenshots when they prove a claim. Full S
 
 **Readiness.** Open every PR ready, never as a draft. A built-in PR tool can default to draft, so set `draft: false` on every creation call through it. With `gh` or `glab`, omit `--draft`. If a PR still opens as a draft, mark it ready through the PR tool, or run the mark-ready command according to the resolved forge. Run the resolved forge's view command before you refer to PR status.
 
-**Babysit.** Opening a PR does not start a babysit. Post the URL and keep building. Finish the phase or stack first. Run a separate babysit pass only when the user asks for one after the whole stack exists. A babysit for each new PR stalls the build and spends checks on commits later waves restart. Push back when feedback drifts from intent.
+**Babysit.** A babysit watches an open PR and fixes its CI failures, conflicts, and review comments. Opening a PR does not start one. Post the URL and keep building. Finish the phase or stack first. Run a separate babysit pass only when the user asks for one after the whole stack exists. A babysit for each new PR stalls the build and spends checks on commits later waves restart. Push back when feedback drifts from intent.
 
 A subagent that opens a PR loads and runs the `unslop-code` and `unslop-comments` skills. It returns to the parent without babysitting. With the `Agent` tool, it runs the review loop, pushes, opens the PR, and posts the URL. Its brief carries the user's task and every later directive verbatim, for the scope seat. Without it, the subagent commits, does not push, and returns its worktree, branch, and base. The parent then runs the loop, pushes, opens the PR, and posts the URL.
 

@@ -19,7 +19,7 @@ Ground first, then commit. Don't start the run until you can state:
 - Scope, quantified: rough units and effort, plus the blockers grounding surfaced.
 - The rigor level, biased high. One-way doors and high blast radius get more. Reversible low-stakes steps get less. Rigor is gates and artifacts, not "try harder".
 
-Present the framing and tradeoffs before committing to a long run. Reversible work proceeds (the `never-block-on-the-human` principle), but a multi-hour run earns one checkpoint.
+Present the framing and tradeoffs before committing to a long run. Reversible work proceeds (the `never-block-on-the-human` principle). Before a run you expect to take hours, wait once for the user's go-ahead on the framing, unless the user said to run unattended.
 
 ## Phase B: Design the workflow
 
@@ -40,9 +40,11 @@ Each unit is an experiment. State the hypothesis, make the smallest change, meas
 - Pair delegated work with a judge. If a worker games the gate, reset and harden the contract. If the gate itself is wrong, fix the gate in its own change rather than routing around it.
 - A verdict is VERIFIED, NOT VERIFIED, or INCONCLUSIVE. Inconclusive is not a pass. Don't hide a negative.
 
+Keep going until the Phase A predicate holds. A message with no tool call ends the run. So don't end it to announce the next step, to offer to continue, to list decisions that block nothing, or because a phase finished. Put status notes in the same message as the next tool call. Work around ordinary obstacles such as errors, timeouts, and failing tools. Besides the Phase A checkpoint, stop only when nothing can move without the user, such as an irreversible or outward-facing action or a product call no experiment can settle, or when a blocker is deliberately protected. Then report it, finish the work that doesn't wait on it, and stop.
+
 ## Phase D: Keep the audit trail
 
-Log the run via the `show-me-your-work` skill. Load it with `Skill`. figure-it-out's work is usually ambitious enough to commit the trail so the reviewer can read it in the PR. The trail plus the diff is what lets the human come back and trust the work.
+Log the run via the `show-me-your-work` skill. Load it with `Skill`. figure-it-out's work is usually ambitious enough to commit the trail so the reviewer can read it in the PR.
 
 ## Phase E: Verify and hand back
 

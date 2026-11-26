@@ -112,7 +112,7 @@ If the CLI needs richer terminal control, use `pty.fork()` or an existing PTY li
 ## Guardrails
 
 - Prefer deterministic waits over sleeps. If you must sleep, explain why.
-- Do not send credentials or destructive commands into a controlled session.
+- Do not send credentials into a controlled session. Send a destructive command only inside a disposable workspace, never against the user's real data.
 - Keep the harness in `/tmp` unless the repo already has a testing/demo harness.
 - Do not hard-code paths from another repository. Adapt commands to the current repo's scripts and runtime.
-- Clean up tmux sessions, temp dirs, inspector processes, and demo artifacts unless the user asks to keep them.
+- Clean up tmux sessions, temp dirs, and inspector processes when done. Keep the transcripts, profiles, and demos you report as evidence, and say where they are.

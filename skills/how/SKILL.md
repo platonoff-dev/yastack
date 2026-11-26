@@ -11,9 +11,9 @@ If the scope is ambiguous, state your interpretation and explore. The user can r
 
 ## 1. Explain
 
-Spawn one regular subagent with `Agent` and `subagent_type: "general-purpose"` that explores and explains in one pass. Give it the user's question and this brief:
+For a question about one file or function, read it and answer directly. Otherwise spawn one regular subagent with `Agent` and `subagent_type: "general-purpose"` that explores and explains in one pass. Give it the user's question and this brief:
 
-> You are writing an architectural explanation for a senior engineer. Explore the codebase and write an explanation that a senior engineer unfamiliar with this area could read and walk away with a solid mental model. They should understand the architecture well enough to start working in it confidently. Treat this as a read-only investigation. Do not edit files or run state-changing commands.
+> You are writing an architectural explanation for a senior engineer. Explore the codebase and write an explanation that a senior engineer unfamiliar with this area could read and walk away with a solid mental model. They should understand the architecture well enough to start working in it confidently. Cite the file and function behind each claim as `path:line`. Treat this as a read-only investigation. Do not edit files or run state-changing commands.
 
 ## 2. Present
 

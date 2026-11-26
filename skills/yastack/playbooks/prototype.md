@@ -2,7 +2,7 @@
 
 **You own the design decision, not the code. The prototype is a throwaway instrument. The real build follows Feature.**
 
-The one playbook where the `laziness-protocol` principle's "smallest change" and the verification bar invert. Speed over polish, code quality does not matter, no planning. The rigor is in picking the right design cheaply. Propose variations the user didn't ask for, throw an approach away and try another.
+The one playbook where the `laziness-protocol` principle's "smallest change" inverts and verification means observing each variant (step 5), not testing it. Speed over polish, code quality does not matter, no planning. The rigor is in picking the right design cheaply. Propose variations the user didn't ask for, throw an approach away and try another.
 
 1. Scope the decision the prototype exists to make: which layout, which interaction, which density, or for an empirical fork which behavior, timing, or approach. No decision means no prototype. Read the [Feature](feature.md) playbook with `Read` and follow it.
 2. Gather references when the design space is open. Search for prior art, summarize a moodboard of themes, palettes, and layouts, let the user pick directions before building. Skip when the direction is set.

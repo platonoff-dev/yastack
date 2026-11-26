@@ -5,7 +5,7 @@ description: Keep working until a checkable condition holds. Runs the work in a 
 
 # Auto goal
 
-Use this when work must continue until a condition holds: a stubborn bug hunt, "run until done", a migration with a finish check. It replaces Cursor's `/loop`.
+Use this when work must continue until a condition holds: a stubborn bug hunt, "run until done", a migration with a finish check.
 
 ## Write the condition
 
@@ -19,7 +19,7 @@ Use this when work must continue until a condition holds: a stubborn bug hunt, "
 
 The model cannot set `/goal` in its own session. Run the goal work in a headless child session instead.
 
-1. Write a brief to a file outside the repository, such as your scratchpad. The child starts with no context. Include the goal, the condition, the relevant files, what is already ruled out, what it must not touch, whether it may commit, and what to report at the end.
+1. Write a brief to a file outside the repository, such as your scratchpad. The child starts with no context. Include the goal, the condition, the relevant files, what is already ruled out, what it must not touch, whether it may commit, and what to report at the end. Tell it to work around ordinary errors and failing tools, and to report a denied action or an off-limits file instead of working around it.
 2. Generate a session id with `uuidgen | tr A-Z a-z`.
 3. From the repository directory, start the child with Bash `run_in_background: true` and `timeout: 7200000`:
 
@@ -34,7 +34,7 @@ The model cannot set `/goal` in its own session. Run the goal work in a headless
 4. While it runs, do not edit the files it works on. Do independent work or end your turn. The harness notifies you when the command exits. Do not poll or sleep.
 5. To check progress, read the child's transcript at `~/.claude/projects/*/<id>.jsonl`. Each goal verdict is a `goal_status` entry with `met` and `reason`.
 6. When it exits, read `<result.json>`: `subtype`, `is_error`, `result`, and `permission_denials`. Then run the check yourself and review the child's diff. Do not trust its summary.
-7. If the condition does not hold, because the 2-hour timeout hit, an error stopped it, or auto mode denied an action, fix what blocked it and resume the same session in the background:
+7. If the condition does not hold, because the 2-hour timeout hit, an error stopped it, or auto mode denied an action, fix what blocked it and resume the same session in the background. If two resumes in a row end on the same blocker, stop and report it:
 
    ```sh
    claude -p --resume <id> "/goal <condition>" \

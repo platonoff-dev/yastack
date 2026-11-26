@@ -1,5 +1,7 @@
 # Guard the Context Window
 
+When context fills up with large outputs, long files, repeated reads, or fan-out planning, route the bulk to subagents and keep their summaries in the main thread, not raw payloads.
+
 **Why:** Context overflow degrades reasoning quality, creates compression artifacts, and halts progress.
 
 **Pattern:**

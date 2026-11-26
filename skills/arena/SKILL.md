@@ -21,7 +21,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 ## Phase B: Fan out
 
-Spawn all N subagents with `Agent` in one message, with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
+Spawn every candidate except the peer seat with `Agent` in one message, with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected. Tell each subagent to load the `arena` and `principles` skills with `Skill` first, then read each principle the brief names. Name the principles that apply to its job. Say in the brief that it is one Phase B candidate, so it produces its artifact and does not run the arena itself.
 
 In the same message, start the peer seat. Load the `peer` skill with `Skill` and follow it. Its brief carries the same task, grounding paths, output path, and rationale ask. A peer can't load skills, so paste the rules of the principles you named instead.
 
@@ -41,7 +41,7 @@ Pick the base a future maintainer can extend most easily without breaking invari
 
 Walk each losing candidate once more for what is worth porting into the base, usually one or two things per candidate, not most of it. Fold each graft in by hand, per the `redesign-from-first-principles` principle, so the result stays coherent under one mental model. Don't paste mechanically.
 
-If the candidates converge on one shape, that is strong agreement. Note it and ship the consensus shape. No graft is needed. If they wildly diverge, Phase A was under-specified. Reframe and re-run rather than averaging the divergence.
+If the candidates converge on one shape, that is strong agreement. Note it and ship the consensus shape. No graft is needed. If they wildly diverge, Phase A was under-specified. Reframe and re-run once rather than averaging the divergence. If the re-run diverges too, report the divergence instead of a pick.
 
 ## Phase F: Verify
 

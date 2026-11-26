@@ -7,7 +7,7 @@ description: "Spawn Comment Sicko, fix accepted findings, and offer encodings fo
 
 Spawn Comment Sicko. Act on accepted findings.
 
-Defer to Comment Sicko's fresh perspective.
+Where step 2 does not settle a finding, defer to Comment Sicko's fresh perspective.
 
 ## Scope
 
@@ -16,7 +16,14 @@ Use the caller's files or diff. Otherwise use the current diff against the base 
 ## Steps
 
 1. Spawn a fresh subagent with `Agent` and `subagent_type: "general-purpose"`. Pass the scope and the absolute path of the [Comment Sicko instructions](references/comment-sicko.md). Tell it to read the Comment Sicko instructions first and to load the `why` skill with `Skill` when those instructions call for it. Do not restate its rules. If no subagent tool is available, report the limitation and fail `/unslop-comments`.
-2. Inspect its report and diff. Reject application-code edits, scope escapes, exception-protected deletions, misstated `MUST KILL` reasons, and flags that treat kept intentional code as guilty. Reshape flags on our-code surprises stay actionable. Do not restore those comments. A keep survives only with proof it is about something we cannot change. Audit missed scoped lint and TypeScript suppressions. Correctness or safety suppressions stay actionable `MUST KILL`s. Restore deletions only with exact exceptions and scoped proof. Before accepting thin `IMPORTANT` or `do not remove` kills or keeps, trace their symbol or load the `why` skill with `Skill` and run it on it. If a kill is ambiguous, do not restore. If a keep is refuted or still ambiguous, delete it. Revert and rerun one rejected report with the failure named. Reject a second, report it open, and fail `/unslop-comments`.
+2. Inspect its report and diff.
+   - Reject application-code edits, scope escapes, exception-protected deletions, misstated `MUST KILL` reasons, and flags that treat kept intentional code as guilty.
+   - Reshape flags on our-code surprises stay actionable. Do not restore those comments.
+   - A keep survives only with proof it is about something we cannot change.
+   - Audit missed scoped lint and TypeScript suppressions. Correctness or safety suppressions stay actionable `MUST KILL`s.
+   - Restore deletions only with exact exceptions and scoped proof.
+   - Before accepting thin `IMPORTANT` or `do not remove` kills or keeps, trace their symbol or load the `why` skill with `Skill` and run it on it. If a kill is ambiguous, do not restore. If a keep is refuted or still ambiguous, delete it.
+   - Revert and rerun one rejected report with the failure named. Reject a second, report it open, and fail `/unslop-comments`.
 3. Fix trivial accepted flags directly by deleting a dead path, dropping a parameter, or using the real API. If any fix needs a shape, sketch it once for the accepted set and surrounding code. Stop at the sketch. Step 4 implements.
 4. Implement the smallest root-cause fix in scope. Remove every named workaround. If the root cause is out of scope, land the smallest in-scope fix and report the rest open. Do not widen the fence or fix instances outside it. Never bolt on symptom guards.
 5. Constraint comments say `do not remove`, `do not change wording`, or `talk to X before changing`. Leave keeps about things we cannot change. Offer the cheapest in-scope type, runtime, test, or CI lint. Wait for interactive approval. Unattended and eval require caller pre-approval. If approved, encode then delete. Otherwise delete, report the constraint open, and sketch out-of-scope work.

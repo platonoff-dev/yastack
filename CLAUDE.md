@@ -10,7 +10,7 @@ yastack is a personal stack of agent skills for Claude Code, and only Claude Cod
 2. **Explicit routing.** A route names the skill a step needs, and the agent loads it with the `Skill` tool at that step. Only the entry point sets `disable-model-invocation: true`, so `/yastack` stays a user command. Every other skill stays model-invocable, because the `Skill` tool refuses a skill with that flag and tells the agent not to replicate it by other means.
 3. **Principles.** Short rules that cut across playbooks, such as "explain the number before you trust it". They are plain Markdown files under one skill, `principles`, whose `SKILL.md` indexes each one with the condition it applies under. The model can load the index for any task, not only under `/yastack`. The entry point loads it at the start of every task. The agent reads a principle file when its condition holds or the user names it, and names it in the final reply.
 
-The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged first. For pstack, follow `.claude/skills/adopt-skill/SKILL.md`. Keep the source text as close to the original as possible. Reject unmet required dependencies rather than deleting the steps that need them.
+The stack grows by iteration on real use. A skill or playbook earns its place by fixing something that went wrong in an actual session. Skills may be adopted from pstack or elsewhere, but each one is judged first. For pstack, the user runs `/adopt-skill`. It sets `disable-model-invocation: true`, so do not read its file in its place. Keep the source text as close to the original as possible. Reject unmet required dependencies rather than deleting the steps that need them.
 
 The remote is public (`github.com/platonoff-dev/yastack`). Nothing work-specific goes here: no employer systems, people, tickets, hostnames, or secrets. Work skills live in the separate corporate `dotai` repo.
 
@@ -56,9 +56,9 @@ When you notice a new rule that keeps being broken, add it to `check.py` rather 
 
 **Load skills with the `Skill` tool, never as files.** When a skill, playbook, or principle sends the agent to another skill, write "the `` `<name>` `` skill". At a step that runs it, also write "load it with `Skill`". Without those words, a skill run outside `/yastack` reads the other skill's file with `cat` (seen in a headless `/architect` run). Never link to its `SKILL.md`, give its path, or tell the agent or a subagent to read it. A file read skips the harness's skill loading, and a skill locked with `disable-model-invocation: true` makes the `Skill` tool refuse and tell the agent not to replicate it by other means. `scripts/check.py` rejects cross-skill `SKILL.md` links and paths.
 
-`disable-model-invocation: true` keeps the skill's description out of the model's context and blocks the `Skill` tool from calling it. The user can still run `/<name>`. Only `yastack` sets it.
+`disable-model-invocation: true` keeps the skill's description out of the model's context and blocks the `Skill` tool from calling it. The user can still run `/<name>`. Only `yastack` sets it among the plugin's skills. The internal `adopt-skill` skill also sets it.
 
-Three things name a skill, and the agent loads it only then: a non-negotiable in the entry point ("before commit → `unslop-code`"), a principle whose condition holds, or a playbook step. Every load stays visible in the transcript.
+Four things name a skill, and the agent loads it only then: a non-negotiable in the entry point ("before commit → `unslop-code`"), a principle whose condition holds, a playbook step, or an explicit user request. Every load stays visible in the transcript.
 
 **Never reach into another skill's directory by path.** A relative path resolves only against the base directory the harness prints for the skill it just loaded. A path into a sibling skill works only by accident of the install layout, and the agent can resolve it against the working directory instead. So:
 
@@ -76,7 +76,7 @@ Every change starts from evidence: a session where the stack did the wrong thing
 Adding or changing a skill or playbook:
 
 1. Prefer editing an existing playbook or skill over adding a new one. A new file needs a second real use case, not a hypothetical one.
-2. Write it tight. Keep only what the model would otherwise get wrong or do inconsistently: exact steps, gotchas, commands, output shapes. Cut general best practice, motivation, and padded examples.
+2. Write it tight. Keep only what the model would otherwise get wrong or do inconsistently: exact steps, gotchas, commands, output shapes. Cut general best practice, padded examples, and motivation that argues a practice is good. Keep a one-clause reason when it changes how a rule applies at its edge.
 3. For a skill: create `skills/<name>/SKILL.md` with the frontmatter above. Name it as the `` `<name>` `` skill from the playbook step that uses it, or from a non-negotiable in `skills/yastack/SKILL.md` when it applies across tasks.
 4. For a principle: create `skills/principles/<name>.md`, a `# Title` and the rule, with no frontmatter. Add `` - [Title](<name>.md). <applies when> `` under its group in `skills/principles/SKILL.md`. The entry states when it applies and the rule in one line. Elsewhere, name it as the `` `<name>` `` principle, never as a link or path.
 5. For a playbook: create `skills/yastack/playbooks/<name>.md` and add `` - **Title** (`<name>`). <use for> `` under **Playbooks**.
